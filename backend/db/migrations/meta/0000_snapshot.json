@@ -1,0 +1,673 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "ea9c895b-75fd-449e-a938-3101e5e99867",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "tag_tree": {
+      "name": "tag_tree",
+      "columns": {
+        "parent_tag_id": {
+          "name": "parent_tag_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "child_tag_id": {
+          "name": "child_tag_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tag_tree_parent_tag_id_tags_tag_id_fk": {
+          "name": "tag_tree_parent_tag_id_tags_tag_id_fk",
+          "tableFrom": "tag_tree",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "parent_tag_id"
+          ],
+          "columnsTo": [
+            "tag_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tag_tree_child_tag_id_tags_tag_id_fk": {
+          "name": "tag_tree_child_tag_id_tags_tag_id_fk",
+          "tableFrom": "tag_tree",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "child_tag_id"
+          ],
+          "columnsTo": [
+            "tag_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tag_tree_parent_tag_id": {
+          "name": "tag_tree_parent_tag_id",
+          "columns": [
+            "parent_tag_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "tags": {
+      "name": "tags",
+      "columns": {
+        "tag_id": {
+          "name": "tag_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "color": {
+          "name": "color",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tags_user_id_users_user_id_fk": {
+          "name": "tags_user_id_users_user_id_fk",
+          "tableFrom": "tags",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tags_tag_id": {
+          "name": "tags_tag_id",
+          "columns": [
+            "tag_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "task_dependency": {
+      "name": "task_dependency",
+      "columns": {
+        "dependant_task_id": {
+          "name": "dependant_task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dependency_task_id": {
+          "name": "dependency_task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_dependency_dependant_task_id_tasks_task_id_fk": {
+          "name": "task_dependency_dependant_task_id_tasks_task_id_fk",
+          "tableFrom": "task_dependency",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "dependant_task_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "task_dependency_dependency_task_id_tasks_task_id_fk": {
+          "name": "task_dependency_dependency_task_id_tasks_task_id_fk",
+          "tableFrom": "task_dependency",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "dependency_task_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "task_instance_dependency": {
+      "name": "task_instance_dependency",
+      "columns": {
+        "dependant_task_instance_id": {
+          "name": "dependant_task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dependency_task_instance_id": {
+          "name": "dependency_task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_instance_dependency_dependant_task_instance_id_task_instances_task_instance_id_fk": {
+          "name": "task_instance_dependency_dependant_task_instance_id_task_instances_task_instance_id_fk",
+          "tableFrom": "task_instance_dependency",
+          "tableTo": "task_instances",
+          "columnsFrom": [
+            "dependant_task_instance_id"
+          ],
+          "columnsTo": [
+            "task_instance_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "task_instance_dependency_dependency_task_instance_id_task_instances_task_instance_id_fk": {
+          "name": "task_instance_dependency_dependency_task_instance_id_task_instances_task_instance_id_fk",
+          "tableFrom": "task_instance_dependency",
+          "tableTo": "task_instances",
+          "columnsFrom": [
+            "dependency_task_instance_id"
+          ],
+          "columnsTo": [
+            "task_instance_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "task_statistics": {
+      "name": "task_statistics",
+      "columns": {
+        "task_instance_id": {
+          "name": "task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_title": {
+          "name": "goal_title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_value": {
+          "name": "goal_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_value_unit": {
+          "name": "goal_value_unit",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_value": {
+          "name": "current_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_statistics_task_instance_id_task_instances_task_instance_id_fk": {
+          "name": "task_statistics_task_instance_id_task_instances_task_instance_id_fk",
+          "tableFrom": "task_statistics",
+          "tableTo": "task_instances",
+          "columnsFrom": [
+            "task_instance_id"
+          ],
+          "columnsTo": [
+            "task_instance_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "task_instance_time_entry": {
+      "name": "task_instance_time_entry",
+      "columns": {
+        "task_instance_id": {
+          "name": "task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scheduled_start_time": {
+          "name": "scheduled_start_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scheduled_end_time": {
+          "name": "scheduled_end_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "actual_start_time": {
+          "name": "actual_start_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "actual_end_time": {
+          "name": "actual_end_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_instance_time_entry_task_instance_id_tasks_task_id_fk": {
+          "name": "task_instance_time_entry_task_instance_id_tasks_task_id_fk",
+          "tableFrom": "task_instance_time_entry",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "task_instance_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "task_instance_tree": {
+      "name": "task_instance_tree",
+      "columns": {
+        "parent_task_instance_id": {
+          "name": "parent_task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "child_task_instance_id": {
+          "name": "child_task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_instance_tree_parent_task_instance_id_task_instances_task_instance_id_fk": {
+          "name": "task_instance_tree_parent_task_instance_id_task_instances_task_instance_id_fk",
+          "tableFrom": "task_instance_tree",
+          "tableTo": "task_instances",
+          "columnsFrom": [
+            "parent_task_instance_id"
+          ],
+          "columnsTo": [
+            "task_instance_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "task_instance_tree_child_task_instance_id_task_instances_task_instance_id_fk": {
+          "name": "task_instance_tree_child_task_instance_id_task_instances_task_instance_id_fk",
+          "tableFrom": "task_instance_tree",
+          "tableTo": "task_instances",
+          "columnsFrom": [
+            "child_task_instance_id"
+          ],
+          "columnsTo": [
+            "task_instance_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "task_instances": {
+      "name": "task_instances",
+      "columns": {
+        "task_instance_id": {
+          "name": "task_instance_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "task_id": {
+          "name": "task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "is_archived": {
+          "name": "is_archived",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_doable": {
+          "name": "is_doable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_instances_task_id_tasks_task_id_fk": {
+          "name": "task_instances_task_id_tasks_task_id_fk",
+          "tableFrom": "task_instances",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "task_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "task_instances_task_instance_id": {
+          "name": "task_instances_task_instance_id",
+          "columns": [
+            "task_instance_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "task_tree": {
+      "name": "task_tree",
+      "columns": {
+        "parent_task_id": {
+          "name": "parent_task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "child_task_id": {
+          "name": "child_task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "task_tree_parent_task_id_tasks_task_id_fk": {
+          "name": "task_tree_parent_task_id_tasks_task_id_fk",
+          "tableFrom": "task_tree",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "parent_task_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "task_tree_child_task_id_tasks_task_id_fk": {
+          "name": "task_tree_child_task_id_tasks_task_id_fk",
+          "tableFrom": "task_tree",
+          "tableTo": "tasks",
+          "columnsFrom": [
+            "child_task_id"
+          ],
+          "columnsTo": [
+            "task_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tasks": {
+      "name": "tasks",
+      "columns": {
+        "task_id": {
+          "name": "task_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "task_author_id": {
+          "name": "task_author_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "is_archived": {
+          "name": "is_archived",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recursive_pattern": {
+          "name": "recursive_pattern",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "color": {
+          "name": "color",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tasks_task_author_id_users_user_id_fk": {
+          "name": "tasks_task_author_id_users_user_id_fk",
+          "tableFrom": "tasks",
+          "tableTo": "users",
+          "columnsFrom": [
+            "task_author_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tasks_task_id": {
+          "name": "tasks_task_id",
+          "columns": [
+            "task_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_user_id": {
+          "name": "users_user_id",
+          "columns": [
+            "user_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

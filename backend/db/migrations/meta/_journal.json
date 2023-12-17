@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1702668335399,
-      "tag": "0000_brief_zaran",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1702681154416,
-      "tag": "0001_large_living_mummy",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1702684296020,
-      "tag": "0002_unique_lord_tyger",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1702684339804,
-      "tag": "0003_fair_plazm",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1702684467727,
-      "tag": "0004_low_maginty",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1702684519995,
-      "tag": "0005_red_spencer_smythe",
+      "when": 1702845089193,
+      "tag": "0000_bizarre_freak",
       "breakpoints": true
     }
   ]

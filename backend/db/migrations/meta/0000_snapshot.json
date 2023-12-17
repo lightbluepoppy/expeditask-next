@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "427a2ea4-e050-49d9-92b1-3e6b673b7d43",
+  "id": "732ec6b1-0416-4f46-929d-cda2d3eafe83",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -86,21 +86,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "account_userId_user_id_fk": {
-          "name": "account_userId_user_id_fk",
-          "tableFrom": "account",
-          "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
         "account_provider_providerAccountId_pk": {
           "name": "account_provider_providerAccountId_pk",
@@ -138,21 +124,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "session_userId_user_id_fk": {
-          "name": "session_userId_user_id_fk",
-          "tableFrom": "session",
-          "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
         "session_sessionToken": {
           "name": "session_sessionToken",
@@ -265,7 +237,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_dependency_dependant_task_id_unique": {
+          "name": "task_dependency_dependant_task_id_unique",
+          "columns": [
+            "dependant_task_id"
+          ]
+        }
+      }
     },
     "task_instance_dependency": {
       "name": "task_instance_dependency",
@@ -288,7 +267,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_instance_dependency_dependant_task_instance_id_unique": {
+          "name": "task_instance_dependency_dependant_task_instance_id_unique",
+          "columns": [
+            "dependant_task_instance_id"
+          ]
+        }
+      }
     },
     "task_statistics": {
       "name": "task_statistics",
@@ -339,7 +325,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_statistics_task_instance_id_unique": {
+          "name": "task_statistics_task_instance_id_unique",
+          "columns": [
+            "task_instance_id"
+          ]
+        }
+      }
     },
     "task_instance_time_entry": {
       "name": "task_instance_time_entry",
@@ -383,7 +376,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_instance_time_entry_task_instance_id_unique": {
+          "name": "task_instance_time_entry_task_instance_id_unique",
+          "columns": [
+            "task_instance_id"
+          ]
+        }
+      }
     },
     "task_instance_tree": {
       "name": "task_instance_tree",
@@ -406,7 +406,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_instance_tree_parent_task_instance_id_unique": {
+          "name": "task_instance_tree_parent_task_instance_id_unique",
+          "columns": [
+            "parent_task_instance_id"
+          ]
+        }
+      }
     },
     "task_instances": {
       "name": "task_instances",
@@ -496,7 +503,14 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "task_tree_parent_task_id_unique": {
+          "name": "task_tree_parent_task_id_unique",
+          "columns": [
+            "parent_task_id"
+          ]
+        }
+      }
     },
     "tasks": {
       "name": "tasks",

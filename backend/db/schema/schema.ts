@@ -90,7 +90,7 @@ export const taskInstances = mysqlTable("task_instances", {
 })
 
 export const taskInstanceTimeEntry = mysqlTable("task_instance_time_entry", {
-    taskInstanceID: varchar("task_instance_id", { length: 255 }),
+    taskInstanceID: varchar("task_instance_id", { length: 255 }).unique(),
     scheduledStartTime: timestamp("scheduled_start_time"),
     scheduledEndTime: timestamp("scheduled_end_time"),
     actualStartTime: timestamp("actual_start_time"),
@@ -98,7 +98,7 @@ export const taskInstanceTimeEntry = mysqlTable("task_instance_time_entry", {
 })
 
 export const taskInstanceStatistics = mysqlTable("task_statistics", {
-    taskInstanceID: varchar("task_instance_id", { length: 255 }),
+    taskInstanceID: varchar("task_instance_id", { length: 255 }).unique(),
     goalTitle: varchar("goal_title", { length: 255 }),
     goalValue: int("goal_value"),
     goalValueUnit: varchar("goal_value_unit", { length: 255 }),
@@ -107,26 +107,26 @@ export const taskInstanceStatistics = mysqlTable("task_statistics", {
 })
 
 export const taskDependency = mysqlTable("task_dependency", {
-    dependantTaskID: varchar("dependant_task_id", { length: 255 }),
+    dependantTaskID: varchar("dependant_task_id", { length: 255 }).unique(),
     dependencyTaskID: varchar("dependency_task_id", { length: 255 }),
 })
 
 export const taskInstanceDependency = mysqlTable("task_instance_dependency", {
     dependantTaskInstanceID: varchar("dependant_task_instance_id", {
         length: 255,
-    }),
+    }).unique(),
     dependencyTaskInstanceID: varchar("dependency_task_instance_id", {
         length: 255,
     }),
 })
 
 export const taskTree = mysqlTable("task_tree", {
-    parentTaskID: varchar("parent_task_id", { length: 255 }),
+    parentTaskID: varchar("parent_task_id", { length: 255 }).unique(),
     childTaskInstanceID: varchar("child_task_id", { length: 255 }),
 })
 
 export const taskInstanceTree = mysqlTable("task_instance_tree", {
-    parentTaskInstanceID: varchar("parent_task_instance_id", { length: 255 }),
+    parentTaskInstanceID: varchar("parent_task_instance_id", { length: 255 }).unique(),
     childTaskID: varchar("child_task_instance_id", { length: 255 }),
 })
 

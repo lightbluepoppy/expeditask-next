@@ -37,12 +37,14 @@ CREATE TABLE `tags` (
 --> statement-breakpoint
 CREATE TABLE `task_dependency` (
 	`dependant_task_id` varchar(255),
-	`dependency_task_id` varchar(255)
+	`dependency_task_id` varchar(255),
+	CONSTRAINT `task_dependency_dependant_task_id_unique` UNIQUE(`dependant_task_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `task_instance_dependency` (
 	`dependant_task_instance_id` varchar(255),
-	`dependency_task_instance_id` varchar(255)
+	`dependency_task_instance_id` varchar(255),
+	CONSTRAINT `task_instance_dependency_dependant_task_instance_id_unique` UNIQUE(`dependant_task_instance_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `task_statistics` (
@@ -51,7 +53,8 @@ CREATE TABLE `task_statistics` (
 	`goal_value` int,
 	`goal_value_unit` varchar(255),
 	`current_value` int,
-	`note` json
+	`note` json,
+	CONSTRAINT `task_statistics_task_instance_id_unique` UNIQUE(`task_instance_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `task_instance_time_entry` (
@@ -59,12 +62,14 @@ CREATE TABLE `task_instance_time_entry` (
 	`scheduled_start_time` timestamp,
 	`scheduled_end_time` timestamp,
 	`actual_start_time` timestamp,
-	`actual_end_time` timestamp
+	`actual_end_time` timestamp,
+	CONSTRAINT `task_instance_time_entry_task_instance_id_unique` UNIQUE(`task_instance_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `task_instance_tree` (
 	`parent_task_instance_id` varchar(255),
-	`child_task_instance_id` varchar(255)
+	`child_task_instance_id` varchar(255),
+	CONSTRAINT `task_instance_tree_parent_task_instance_id_unique` UNIQUE(`parent_task_instance_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `task_instances` (
@@ -80,7 +85,8 @@ CREATE TABLE `task_instances` (
 --> statement-breakpoint
 CREATE TABLE `task_tree` (
 	`parent_task_id` varchar(255),
-	`child_task_id` varchar(255)
+	`child_task_id` varchar(255),
+	CONSTRAINT `task_tree_parent_task_id_unique` UNIQUE(`parent_task_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `tasks` (
@@ -111,6 +117,3 @@ CREATE TABLE `verificationToken` (
 	`expires` timestamp NOT NULL,
 	CONSTRAINT `verificationToken_identifier_token_pk` PRIMARY KEY(`identifier`,`token`)
 );
---> statement-breakpoint
-ALTER TABLE `account` ADD CONSTRAINT `account_userId_user_id_fk` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `session` ADD CONSTRAINT `session_userId_user_id_fk` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE cascade ON UPDATE no action;

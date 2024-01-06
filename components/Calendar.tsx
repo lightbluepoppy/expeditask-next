@@ -46,7 +46,7 @@ export function Dayjs({ ...props }) {
         <div className="h-[1000px]" {...props}>
             <Calendar
                 selectable
-                components={components}
+                // components={components}
                 defaultDate={defaultDate}
                 events={events}
                 localizer={djLocalizer}

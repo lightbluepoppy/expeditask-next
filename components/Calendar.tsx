@@ -1,27 +1,11 @@
-// import { Calendar, momentLocalizer } from "react-big-calendar"
-
-// export const Timeline = () => {
-//     // return <div className="h-[320]px w-16 bg-sky-500">Sa</div>
-//     const localizer = momentLocalizer(moment)
-//     return (
-//         <>
-//             <Calendar
-//                 localizer={localizer}
-//                 events={myEventsList}
-//                 startAccessor="start"
-//                 endAccessor="end"
-//             />
-//         </>
-//     )
-// }
-
 "use client"
 
-import React, { Fragment, useMemo } from "react"
+import React, { useMemo } from "react"
 import dayjs from "dayjs"
 import { Calendar, Views, dayjsLocalizer } from "react-big-calendar"
 import events from "components/resources/demo/events"
 import "react-big-calendar/lib/css/react-big-calendar.css"
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
 
 // Note that the dayjsLocalizer extends Day.js with the following plugins:
 // - IsBetween
@@ -59,19 +43,19 @@ export function Dayjs({ ...props }) {
     )
 
     return (
-        <Fragment>
-            <div className="height600" {...props}>
-                <Calendar
-                    components={components}
-                    defaultDate={defaultDate}
-                    events={events}
-                    localizer={djLocalizer}
-                    max={max}
-                    showMultiDayTimes
-                    step={60}
-                    views={views}
-                />
-            </div>
-        </Fragment>
+        <div className="h-[1000px]" {...props}>
+            <Calendar
+                selectable
+                components={components}
+                defaultDate={defaultDate}
+                events={events}
+                localizer={djLocalizer}
+                max={max}
+                showMultiDayTimes
+                step={60}
+                views={views}
+                defaultView="month"
+            />
+        </div>
     )
 }

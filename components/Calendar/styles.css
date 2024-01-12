@@ -1,5 +1,0 @@
-@charset "UTF-8";
-@import "react-big-calendar/lib/css/react-big-calendar.css" .rbc-off-range-bg {
-    /* background: #e6e6e6; */
-    @apply bg-cyan-300;
-}

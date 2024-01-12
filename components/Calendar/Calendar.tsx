@@ -1,61 +1,29 @@
-"use client"
-import React, { useMemo } from "react"
-import dayjs from "dayjs"
-import { Calendar, Views, dayjsLocalizer } from "react-big-calendar"
-import "react-big-calendar/lib/css/react-big-calendar.css"
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
-import events from "components/resources/demo/events"
-import ""
+// import { useState } from "react"
 
-// Note that the dayjsLocalizer extends Day.js with the following plugins:
-// - IsBetween
-// - IsSameOrAfter
-// - IsSameOrBefore
-// - LocaleData
-// - LocalizedFormat
-// - MinMax
-// - UTC
+// export const ViewSwtichingTab = () => {
+//     type CalendarViews = {
+//         monthly: string
+//         weekly: string
+//         daily: string
+//     }
+//     const views = ["monthly", "weekly", "daily"]
+//     const [activeView, setActiveView] = useState("monthly")
 
-// add optional time zone support
-import timezone from "dayjs/plugin/timezone"
-dayjs.extend(timezone)
+//     return (
+//         {views.map((view) => (
+//         <button
+//             key={view}
+//             onClick={() => setActiveView(view)}
+//             className=""
+//         >
 
-const djLocalizer = dayjsLocalizer(dayjs)
+//         </button>
+//         ))}
+//     )
+// }
 
-const ColoredDateCellWrapper = ({ children }) =>
-    React.cloneElement(React.Children.only(children), {
-        style: {
-            backgroundColor: "lightblue",
-        },
-    })
-
-export function Dayjs({ ...props }) {
-    const { components, defaultDate, max, views } = useMemo(
-        () => ({
-            components: {
-                timeSlotWrapper: ColoredDateCellWrapper,
-            },
-            defaultDate: new Date(2015, 3, 1),
-            max: dayjs().endOf("day").subtract(1, "hours").toDate(),
-            views: Object.keys(Views).map((k) => Views[k]),
-        }),
-        [],
-    )
-
-    return (
-        <div className="h-[1000px]" {...props}>
-            <Calendar
-                selectable
-                // components={components}
-                defaultDate={defaultDate}
-                events={events}
-                localizer={djLocalizer}
-                max={max}
-                showMultiDayTimes
-                step={60}
-                views={views}
-                defaultView="month"
-            />
-        </div>
-    )
-}
+// export const DailyCalendar = () => {
+//    return(
+//         <div></div>
+//    )
+// }

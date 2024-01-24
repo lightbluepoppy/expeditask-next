@@ -1,13 +1,13 @@
 import { DailyCalendar } from "components/Calendar/DailyCalendar"
-import { DailyGrid } from "components/Calendar/DailyGrid"
+import { DailyView } from "components/Calendar/DailyView"
 
 const Calendar = async () => {
-    return (
-        <>
-            {/* <DailyCalendar /> */}
-            <DailyGrid />
-        </>
-    )
+  return (
+    <>
+      {/* <DailyCalendar /> */}
+      <DailyView />
+    </>
+  )
 }
 
 export default Calendar

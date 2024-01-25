@@ -1,7 +1,6 @@
 "use client"
-import React from "react"
 
-interface CalendarEvent {
+type CalendarEvent = {
   id: string
   title: string
   scheduledStartTime: string // ISO string format
@@ -10,8 +9,12 @@ interface CalendarEvent {
   recordedEndTime: string // ISO string format
 }
 
-interface EventTypeProps {
+type EventTypeProps = {
   type: "scheduled" | "recorded"
+}
+
+type Props = {
+  children?: React.ReactNode
 }
 
 // Sample events
@@ -37,7 +40,7 @@ const events: CalendarEvent[] = [
     title: "test3",
     scheduledStartTime: "2024-01-09T20:00:00+0000",
     scheduledEndTime: "2024-01-10T02:49:51+0000",
-    recordedStartTime: "2024-01-09T22:49:51+0000",
+    recordedStartTime: "2024-01-09T20:49:51+0000",
     recordedEndTime: "2024-01-10T02:50:00+0000",
   },
 ]
@@ -55,7 +58,7 @@ const HourlyGrid: React.FC = () => {
 
 const DailyEventColumnDiv: React.FC<Props> = ({ children }) => {
   return (
-    <div className="relative flex w-[200px] flex-col justify-evenly border-x border-slate-500">
+    <div className="relative flex w-[100px] flex-col justify-evenly border-l border-slate-400">
       <HourlyGrid />
       {children}
     </div>
@@ -63,78 +66,28 @@ const DailyEventColumnDiv: React.FC<Props> = ({ children }) => {
 }
 
 export const DailyEventColumn: React.FC = () => {
-  const hour24Date = (time: string) => {
-    return new Date(time).toLocaleTimeString("en-US", {
-      hour12: false,
-    })
-  }
-
-  //   const ScheduledEvents: React.FC = () => {
-  //     return events.map((event) => {
-  //       const start = new Date(event.scheduledStartTime)
-  //       const end = new Date(event.scheduledEndTime)
-
-  //       const top = ((start.getHours() + start.getMinutes() / 60) * 100) / 24
-  //       const height = (((end.getTime() - start.getTime()) / (1000 * 60 * 60)) * 100) / 24
-
-  //       console.log(top)
-  //       console.log(height)
-
-  //       return (
-  //         <div
-  //           key={event.id}
-  //           className="absolute w-full px-1"
-  //           style={{ top: `${top}%`, height: `${height}%` }}
-  //         >
-  //           <div className="h-full rounded bg-blue-100 p-2">
-  //             <h3 className="font-bold">{event.title}</h3>
-  //             <p>{hour24Date(event.scheduledStartTime)}</p>
-  //             <p>{hour24Date(event.scheduledEndTime)}</p>
-  //           </div>
-  //         </div>
-  //       )
-  //     })
-  //   }
-
-  // const RecordedEvents: React.FC = () => {
-  //   return events.map((event) => {
-  //     const start = new Date(event.recordedStartTime)
-  //     const end = new Date(event.recordedEndTime)
-
-  //     const top = ((start.getHours() + start.getMinutes() / 60) * 100) / 24
-  //     const height = (((end.getTime() - start.getTime()) / (1000 * 60 * 60)) * 100) / 24
-
-  //     console.log(top)
-  //     console.log(height)
-
-  //     return (
-  //       <div
-  //         key={event.id}
-  //         className="absolute w-full px-1"
-  //         style={{ top: `${top}%`, height: `${height}%` }}
-  //       >
-  //         <div className="h-full rounded bg-blue-100 p-2">
-  //           <h3 className="font-bold">{event.title}</h3>
-  //           <p>{hour24Date(event.recordedStartTime)}</p>
-  //           <p>{hour24Date(event.recordedEndTime)}</p>
-  //         </div>
-  //       </div>
-  //     )
-  //   })
-  // }
-
   const Events: React.FC<EventTypeProps> = ({ type }) => {
     const timeKey = type === "scheduled" ? "scheduled" : "recorded"
+
+    const hour24Date = (time: string) => {
+      return new Date(time).toLocaleTimeString("en-US", {
+        hour12: false,
+      })
+    }
 
     return events.map((event) => {
       const start = new Date(event[`${timeKey}StartTime`])
       const end = new Date(event[`${timeKey}EndTime`])
 
-      const top = ((start.getHours() + start.getMinutes() / 60) * 100) / 24
-      const height = (((end.getTime() - start.getTime()) / (1000 * 60 * 60)) * 100) / 24
+      const top = ((start.getHours() * 60 + start.getMinutes()) / (24 * 60)) * 100
+      let height = ((end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)) * 100 // hour * minutes * seconds * milliseconds
 
-      console.log(top)
-      console.log(height)
+      const remainingDuration =
+        ((end.getHours() * 60 + end.getMinutes()) / (24 * 60)) * 100
+
+      if (end.getDay() !== start.getDay()) {
+        height = height - remainingDuration
+      }
 
       return (
         <div

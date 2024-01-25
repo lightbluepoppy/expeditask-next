@@ -1,10 +1,8 @@
-import { DailyCalendar } from "components/Calendar/DailyCalendar"
-import { DailyView } from "components/Calendar/DailyView"
+import { DailyView } from "src/components/Calendar/day/DailyView"
 
 const Calendar = async () => {
   return (
     <>
-      {/* <DailyCalendar /> */}
       <DailyView />
     </>
   )

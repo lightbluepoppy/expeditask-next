@@ -1,6 +1,7 @@
 "use client"
-import { DailyEventColumn } from "./DailyEventColumn"
-export const DailyView: React.FC = () => {
+import { WeeklyEventColumns } from "./WeeklyEventColumns"
+
+export const WeeklyView: React.FC = () => {
   const hours: number[] = Array.from({ length: 23 }, (_, i) => i + 1)
 
   const HourLabels: React.FC = () => (
@@ -14,9 +15,9 @@ export const DailyView: React.FC = () => {
   )
 
   return (
-    <div className="relative flex h-[1000px] w-screen flex-row bg-gray-50">
+    <div className="relative flex h-[1000px] w-[1600px] flex-row bg-gray-50">
       <HourLabels />
-      <DailyEventColumn />
+      <WeeklyEventColumns />
     </div>
   )
 }

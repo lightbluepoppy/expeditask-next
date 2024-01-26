@@ -1,21 +1,8 @@
 "use client"
-import React, { useContext } from "react"
 import { useSelectedDateStore } from "src/store/useSelectedDateStore"
-import { DateContext } from "src/components/Calendar/DateContextProvider"
 import { localeDate } from "src/utils/locale"
 
 export const DateSwitcher: React.FC = () => {
-  // const { selectedDate, setSelectedDate } = useContext(DateContext)
-
-  // const changeSelectedDate = (days: number) => {
-  //   const newDate = new Date(selectedDate)
-  //   newDate.setDate(newDate.getDate() + days)
-  //   setSelectedDate(newDate)
-  // }
-
-  // const selectedDate = useSelectedDateStore((state) => state.selectedDate)
-  // const handleChangeSelectedDate = (day: number) => {
-  // }
   const selectedDate = useSelectedDateStore((state) => state.selectedDate)
   const setSelectedDate = useSelectedDateStore((state) => state.setSelectedDate)
   const changeSelectedDate = useSelectedDateStore((state) => state.changeSelectedDate)
@@ -36,7 +23,7 @@ export const DateSwitcher: React.FC = () => {
           &lt;
         </button>
         <button
-          onClick={() => setSelectedDate(new Date())}
+          onClick={() => setSelectedDate(new Date("2024-01-10"))}
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           .

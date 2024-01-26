@@ -1,20 +1,61 @@
 import { EventProps } from "src/types"
-import { localeTime } from "src/utils/locale"
+import { localeTime, localeDate } from "src/utils/locale"
+import { useSelectedDateStore } from "src/store/useSelectedDateStore"
 
 export const Events: React.FC<EventProps> = ({ events, type }) => {
   const timeKey = type === "scheduled" ? "scheduled" : "recorded"
 
-  return events.map((event) => {
-    const start = new Date(event[`${timeKey}StartTime`])
-    const end = new Date(event[`${timeKey}EndTime`])
+  const selectedDate = useSelectedDateStore((state) => state.selectedDate)
+  const targetDate = selectedDate.getDate()
 
-    const top = ((start.getHours() * 60 + start.getMinutes()) / (60 * 24)) * 100
-    let height = ((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) * 100 // milliseconds * seconds * minutes * hour
+  const filteredEvents = events.filter((event) => {
+    const eventStartDate = new Date(event.scheduledStartTime).getDate()
+    const eventEndDate = new Date(event.scheduledEndTime).getDate()
 
-    const remainingDuration = ((end.getHours() * 60 + end.getMinutes()) / (24 * 60)) * 100
+    return (
+      eventStartDate === targetDate ||
+      (eventStartDate < targetDate && eventEndDate === targetDate) ||
+      (eventStartDate < targetDate && eventEndDate > targetDate)
+    )
+  })
 
-    if (end.getDate() !== start.getDate()) {
-      height = height - remainingDuration
+  return filteredEvents.map((event) => {
+    const startTime = new Date(event[`${timeKey}StartTime`])
+    const endTime = new Date(event[`${timeKey}EndTime`])
+
+    // express Date object as maximum 1440 minutes and
+    // calculate the ratio
+    let top = ((startTime.getHours() * 60 + startTime.getMinutes()) / (60 * 24)) * 100
+    let height = ((endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60 * 24)) * 100 // milliseconds * seconds * minutes * hour
+    const bottom = ((endTime.getHours() * 60 + endTime.getMinutes()) / (60 * 24)) * 100
+
+    const timeDifference = endTime.getDate() - startTime.getDate()
+
+    // clip bottom of the events whose dates past midnight
+    // that last across more than two days
+    if (timeDifference >= 1) {
+      height = height - bottom - (timeDifference - 1) * 100
+    }
+
+    // events that last for more than two days
+    // must be spread from the top to bottom
+    // it is between start and end
+    if (
+      timeDifference > 1 &&
+      startTime.getDate() < targetDate &&
+      endTime.getDate() > targetDate
+    ) {
+      top = 0
+      height = 100
+    }
+
+    // put the clipped events at the top of the next day
+    if (
+      endTime.getDate() === selectedDate.getDate() &&
+      startTime.getDate() < selectedDate.getDate()
+    ) {
+      top = 0
+      height = bottom
     }
 
     return (
@@ -23,10 +64,12 @@ export const Events: React.FC<EventProps> = ({ events, type }) => {
         className="absolute w-full px-1"
         style={{ top: `${top}%`, height: `${height}%` }}
       >
-        <div className="h-full rounded bg-blue-100 p-2 shadow-md">
-          <h3 className="font-bold">{event.title}</h3>
-          <p>{localeTime(new Date(event[`${timeKey}StartTime`]))}</p>
-          <p>{localeTime(new Date(event[`${timeKey}EndTime`]))}</p>
+        <div className="h-full overflow-hidden rounded bg-blue-100 p-2 shadow-md">
+          <h3 className="text-sm font-bold">{event.title}</h3>
+          <p className="text-xs">{localeDate(startTime)}</p>
+          <p className="text-xs">{localeTime(startTime)}</p>
+          <p className="text-xs">{localeDate(endTime)}</p>
+          <p className="text-xs">{localeTime(endTime)}</p>
         </div>
       </div>
     )

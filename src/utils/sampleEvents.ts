@@ -1,4 +1,3 @@
-// Sample events
 export const events = [
   {
     id: "test1",
@@ -23,5 +22,21 @@ export const events = [
     scheduledEndTime: "2024-01-10T02:49:51+0000",
     recordedStartTime: "2024-01-09T20:49:51+0000",
     recordedEndTime: "2024-01-10T02:50:00+0000",
+  },
+  {
+    id: "test4",
+    title: "test4",
+    scheduledStartTime: "2024-01-10T17:00:00+0000",
+    scheduledEndTime: "2024-01-10T02:00:00+0000",
+    recordedStartTime: "2024-01-10T20:00:00+0000",
+    recordedEndTime: "2024-01-11T02:50:00+0000",
+  },
+  {
+    id: "test5",
+    title: "test5",
+    scheduledStartTime: "2024-01-10T17:00:00+0000",
+    scheduledEndTime: "2024-01-12T09:00:00+0000",
+    recordedStartTime: "2024-01-10T21:00:00+0000",
+    recordedEndTime: "2024-01-10T22:50:00+0000",
   },
 ]

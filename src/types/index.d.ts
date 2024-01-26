@@ -31,17 +31,20 @@ export type SelectTaskInstanceStatistics = SelectTaskInstanceStatistics
 export type InsertTags = InsertTags
 export type SelectTags = SelectTags
 
-// export type CalendarEventProps = {
-//   id: string
-//   title: string
-//   scheduledStartTime: string // ISO string format
-//   scheduledEndTime: string // ISO string format
-//   recordedStartTime: string // ISO string format
-//   recordedEndTime: string // ISO string format
-// }
+export type CalendarEvent = {
+  id: string
+  title: string
+  scheduledStartTime: string // ISO string format
+  scheduledEndTime: string // ISO string format
+  recordedStartTime: string // ISO string format
+  recordedEndTime: string // ISO string format
+}
 
-export type EventTypeProps = {
-  type: "scheduled" | "recorded"
+export type EventType = "scheduled" | "recorded"
+
+export type EventProps = {
+  events: CalendarEvent[]
+  type: EventType
 }
 
 export type Props = {

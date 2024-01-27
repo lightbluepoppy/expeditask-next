@@ -39,4 +39,12 @@ export const events = [
     recordedStartTime: "2024-01-10T21:00:00+0000",
     recordedEndTime: "2024-01-10T22:50:00+0000",
   },
+  {
+    id: "test6",
+    title: "test6",
+    scheduledStartTime: "2024-01-13T17:00:00+0000",
+    scheduledEndTime: "2024-01-19T09:00:00+0000",
+    recordedStartTime: "2024-01-10T21:00:00+0000",
+    recordedEndTime: "2024-01-10T22:50:00+0000",
+  },
 ]

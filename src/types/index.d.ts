@@ -41,12 +41,18 @@ export type CalendarEvent = {
 }
 
 export type EventType = "scheduled" | "recorded"
+export type TimeType = "start" | "end"
 
 export type EventProps = {
+  date: Date
   events: CalendarEvent[]
   type: EventType
 }
 
 export type Props = {
   children?: React.ReactNode
+}
+
+export type DailyEventColumProp = {
+  date: Date
 }

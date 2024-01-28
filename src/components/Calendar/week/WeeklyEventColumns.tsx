@@ -23,11 +23,5 @@ export const WeeklyEventColumns: React.FC = () => {
   const selectedDate = useSelectedDateStore((state) => state.selectedDate)
   const weekDates = getWeekDates(selectedDate)
 
-  const WeeklyColumn = () => {
-    // const [weekDates, setWeekDates] = useState<Date[]>(getWeekDates(startDate))
-
-    return weekDates.map((selectedDate) => <DailyEventColumn date={selectedDate} />)
-  }
-
-  return <WeeklyColumn />
+  return weekDates.map((selectedDate) => <DailyEventColumn date={selectedDate} />)
 }

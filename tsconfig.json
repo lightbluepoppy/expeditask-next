@@ -18,11 +18,9 @@
         "name": "next"
       }
     ],
-    "paths": {
-      // "@/*": [
-      //   "./src/*"
-      // ]
-    },
+    // "paths": {
+    //   "./src/*": ["./src/*"]
+    // },
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true
   },

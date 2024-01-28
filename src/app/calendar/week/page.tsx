@@ -1,4 +1,4 @@
-import { WeeklyView } from "src/components/Calendar/week/WeeklyView"
+import { WeeklyView } from "src/components/calendar/week/WeeklyView"
 
 const WeeklyCalendar = async () => {
   return (

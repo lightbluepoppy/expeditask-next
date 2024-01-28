@@ -1,7 +1,7 @@
 "use client"
 import { WeeklyEventColumns } from "./WeeklyEventColumns"
-import { HourLabels } from "src/components/Calendar/HourLabels"
-import { DateSwitcher } from "src/components/Calendar/DateSwitcher"
+import { HourLabels } from "src/components/calendar/HourLabels"
+import { DateSwitcher } from "src/components/calendar/DateSwitcher"
 
 export const WeeklyView: React.FC = () => {
   return (

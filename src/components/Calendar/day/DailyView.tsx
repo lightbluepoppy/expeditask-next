@@ -1,7 +1,7 @@
 "use client"
-import { DailyEventColumn } from "./DailyEventColumn"
-import { HourLabels } from "src/components/Calendar/HourLabels"
-import { DateSwitcher } from "src/components/Calendar/DateSwitcher"
+import { DailyEventColumn } from "src/components/calendar/day/DailyEventColumn"
+import { HourLabels } from "src/components/calendar/HourLabels"
+import { DateSwitcher } from "src/components/calendar/DateSwitcher"
 import { useSelectedDateStore } from "src/store/useSelectedDateStore"
 
 export const DailyView: React.FC = () => {

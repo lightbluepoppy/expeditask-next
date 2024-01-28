@@ -42,6 +42,7 @@ export type CalendarEvent = {
 
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
+export type CalendarView = "daily" | "weekly"
 
 export type EventProps = {
   date: Date
@@ -53,6 +54,13 @@ export type Props = {
   children?: React.ReactNode
 }
 
-export type DailyEventColumProp = {
+export type DailyEventColumProps = {
   date: Date
+}
+
+import { MenuGroupProps } from "@radix-ui/react-dropdown-menu"
+
+export interface CalendarViewDropdownProps extends MenuGroupProps {
+  value?: CalendarView
+  onValueChange?: (view: CalendarView) => void
 }

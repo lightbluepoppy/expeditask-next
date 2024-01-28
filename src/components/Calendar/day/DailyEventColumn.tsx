@@ -1,11 +1,11 @@
 "use client"
-import { Events } from "src/components/Calendar/Events"
-import { HourGrid } from "src/components/Calendar/HourGrid"
+import { Events } from "src/components/calendar/Events"
+import { HourGrid } from "src/components/calendar/HourGrid"
 import { localeDate } from "src/utils/locale"
 import { events } from "src/utils/sampleEvents"
-import { EventType, DailyEventColumProp } from "src/types"
+import { EventType, DailyEventColumProps } from "src/types"
 
-export const DailyEventColumn: React.FC<DailyEventColumProp> = ({
+export const DailyEventColumn: React.FC<DailyEventColumProps> = ({
   date: selectedDate,
 }) => {
   const types: EventType[] = ["scheduled", "recorded"]

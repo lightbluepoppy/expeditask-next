@@ -1,13 +1,12 @@
-"use client"
 import { db } from "backend/db/server"
-import { Dayjs } from "src/components/Calendar"
+import { Calendar } from "src/components/calendar/Calendar"
 
 const Dashboard = async () => {
   // const tasks = await db.query.tasks.findMany()
   return (
     <>
       {/* <div>{tasks.toString()}</div> */}
-      <Dayjs />
+      <Calendar />
     </>
   )
 }

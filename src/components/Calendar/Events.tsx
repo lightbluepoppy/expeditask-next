@@ -1,3 +1,4 @@
+"use client"
 import { useMemo } from "react"
 import { TimeType, EventProps } from "src/types"
 import { localeTime, localeDate } from "src/utils/locale"
@@ -58,7 +59,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
 
     // the event component that is in between the start and
     // end date, therefore spread across the top to bottom
-    if (dateDifference > 1 && targetDate > startTimeDate && endTimeDate > targetDate) {
+    if (dateDifference >= 2 && targetDate > startTimeDate && endTimeDate > targetDate) {
       top = 0
       height = 100
     }

@@ -1,4 +1,9 @@
+"use client"
+import { MenuRadioGroupProps } from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
+import { useState } from "react"
+import { capitalize } from "src/utils/utils"
+import Link from "next/link"
 
 import { Button } from "src/components/ui/button"
 import {
@@ -10,49 +15,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu"
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import { CalendarView, CalendarViewDropdownProps } from "src/types"
 
-const DropdownMenuRadioGroupOfCalendar = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Group>,
-  // React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Group> & {
-  //   value?: CalendarView
-  //   onValueChange?: (value: CalendarView) => void
-  // }
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Group> &
-    CalendarViewDropdownProps
->(({ children, value, onValueChange, ...props }, ref) => (
-  <DropdownMenuPrimitive.Group
-    ref={ref}
-    value={value}
-    onValueChange={onValueChange}
-    {...props}
-  >
-    {children}
-  </DropdownMenuPrimitive.Group>
-))
+export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
+  const [calendarView, setCalendarView] = useState<string>("daily")
 
-DropdownMenuRadioGroupOfCalendar.displayName = "DropdownMenuRadioGroupOfCalendar"
-
-export const CalendarViewDropdown: React.FC<CalendarViewDropdownProps> = ({
-  value,
-  onValueChange,
-}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button variant="outline">{capitalize(calendarView!)}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Calendar view</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroupOfCalendar value={value} onValueChange={onValueChange}>
-          <DropdownMenuRadioItem value="daily">Daily</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="weekly">Weekly</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroupOfCalendar>
-        <DropdownMenuRadioGroup value={value} onValueChange={onValueChange}>
-          <DropdownMenuRadioItem value="daily">Daily</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="weekly">Weekly</DropdownMenuRadioItem>
+        <DropdownMenuRadioGroup value={calendarView} onValueChange={setCalendarView}>
+          <DropdownMenuRadioItem value="daily">
+            <Link href="/calendar/day">Daily</Link>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="weekly">
+            <Link href="/calendar/week">Weekly</Link>
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

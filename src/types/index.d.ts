@@ -55,12 +55,28 @@ export type Props = {
 }
 
 export type DailyEventColumProps = {
-  date: Date
+  date?: Date
 }
 
-import { MenuGroupProps } from "@radix-ui/react-dropdown-menu"
+export type EventEditorProps = {
+  eventID: string
+  top: number
+}
 
-export interface CalendarViewDropdownProps extends MenuGroupProps {
-  value?: CalendarView
-  onValueChange?: (view: CalendarView) => void
+export type SelectedDateStore = {
+  selectedDate: Date
+  setSelectedDate: (date: Date) => void
+  changeSelectedDate: (day: number) => void
+}
+
+export type SelectedEventStore = {
+  selectedEvent: SelectTask.taskID
+  setSelectedEvent: (eventID: selectTask.taskID) => void
+}
+
+import { DailyView } from "src/components/calendar/day/DailyView"
+import { WeeklyView } from "src/components/calendar/week/WeeklyView"
+
+export type CalendarChildrenProps = {
+  children: DailyView | WeeklyView
 }

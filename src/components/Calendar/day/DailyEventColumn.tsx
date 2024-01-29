@@ -1,22 +1,24 @@
 "use client"
+import { useState } from "react"
 import { Events } from "src/components/calendar/Events"
-import { HourGrid } from "src/components/calendar/HourGrid"
-import { localeDate } from "src/utils/locale"
+import { localeDate } from "src/utils/utils"
 import { events } from "src/utils/sampleEvents"
 import { EventType, DailyEventColumProps } from "src/types"
+import { useSelectedDateStore } from "src/stores/stores"
 
-export const DailyEventColumn: React.FC<DailyEventColumProps> = ({
-  date: selectedDate,
-}) => {
+export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
+  const selectedDate =
+    date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const types: EventType[] = ["scheduled", "recorded"]
 
   return (
     <div className="flex" id={localeDate(selectedDate)} key={localeDate(selectedDate)}>
       {types.map((type) => (
-        <div className="relative flex w-[100px] flex-col justify-evenly border-l border-slate-400">
-          <HourGrid />
-          <Events date={selectedDate} events={events} type={type} />
-        </div>
+        <>
+          <div className="relative flex w-[100px] flex-col justify-evenly border-l border-slate-400">
+            <Events date={selectedDate} events={events} type={type} />
+          </div>
+        </>
       ))}
     </div>
   )

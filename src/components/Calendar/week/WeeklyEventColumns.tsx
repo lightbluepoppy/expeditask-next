@@ -1,8 +1,8 @@
 "use client"
-import { useSelectedDateStore } from "src/store/useSelectedDateStore"
+import { useSelectedDateStore } from "src/stores/stores"
 import { DailyEventColumn } from "../day/DailyEventColumn"
 
-const getWeekDates = (inputDate: Date): Date[] => {
+function getWeekDates(inputDate: Date): Date[] {
   const dayOfWeek = inputDate.getDay()
 
   const mondayDate = new Date(inputDate)
@@ -15,6 +15,7 @@ const getWeekDates = (inputDate: Date): Date[] => {
     currentDate.setDate(mondayDate.getDate() + i)
     weekDates.push(currentDate)
   }
+  console.log(weekDates)
 
   return weekDates
 }

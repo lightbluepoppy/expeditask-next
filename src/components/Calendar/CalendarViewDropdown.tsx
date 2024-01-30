@@ -4,20 +4,21 @@ import * as React from "react"
 import { useState } from "react"
 import { capitalize } from "src/utils/utils"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { Button } from "src/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu"
 
 export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
-  const [calendarView, setCalendarView] = useState<string>("daily")
+  const [calendarView, setCalendarView] = useState<string>("day")
+  const views = ["day", "week"]
+  const router = useRouter()
 
   return (
     <DropdownMenu>
@@ -26,12 +27,16 @@ export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuRadioGroup value={calendarView} onValueChange={setCalendarView}>
-          <DropdownMenuRadioItem value="daily">
-            <Link href="/calendar/day">Daily</Link>
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="weekly">
-            <Link href="/calendar/week">Weekly</Link>
-          </DropdownMenuRadioItem>
+          {views.map((view, index) => (
+            <DropdownMenuRadioItem
+              key={index}
+              value={view}
+              onClick={() => router.push(`/calendar/${view}`)}
+              style={{ cursor: "pointer" }}
+            >
+              {capitalize(view)}
+            </DropdownMenuRadioItem>
+          ))}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

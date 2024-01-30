@@ -42,7 +42,7 @@ export type CalendarEvent = {
 
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
-export type CalendarView = "daily" | "weekly"
+export type CalendarView = "day" | "week"
 
 export type EventProps = {
   date: Date

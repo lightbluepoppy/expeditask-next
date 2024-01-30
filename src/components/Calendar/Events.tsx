@@ -84,22 +84,20 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
     )
 
     return (
-      <>
-        <div
-          key={event.id}
-          className="absolute w-full pr-1"
-          style={{ top: `${top}%`, height: `${height}%` }}
-          // onClick={handleEditorOpen}
-        >
-          <div className="outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2">
-            <h3 className="text-sm font-bold">{event.title}</h3>
-            <p className="text-xs">{localeDate(eventStartTime)}</p>
-            <p className="text-xs">{localeTime(eventStartTime)}</p>
-            <p className="text-xs">{localeDate(eventEndTime)}</p>
-            <p className="text-xs">{localeTime(eventEndTime)}</p>
-          </div>
+      <div
+        key={event.id}
+        className="absolute w-full pr-1"
+        style={{ top: `${top}%`, height: `${height}%` }}
+        // onClick={handleEditorOpen}
+      >
+        <div className="outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2">
+          <h3 className="text-sm font-bold">{event.title}</h3>
+          <p className="text-xs">{localeDate(eventStartTime)}</p>
+          <p className="text-xs">{localeTime(eventStartTime)}</p>
+          <p className="text-xs">{localeDate(eventEndTime)}</p>
+          <p className="text-xs">{localeTime(eventEndTime)}</p>
         </div>
-      </>
+      </div>
     )
   })
 }

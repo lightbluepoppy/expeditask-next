@@ -1,6 +1,6 @@
 "use client"
 import { useSelectedDateStore } from "src/stores/stores"
-import { DailyEventColumn } from "../day/DailyEventColumn"
+import { DailyEventColumn } from "src/components/calendar/DailyEventColumn"
 
 function getWeekDates(inputDate: Date): Date[] {
   const dayOfWeek = inputDate.getDay()
@@ -15,7 +15,6 @@ function getWeekDates(inputDate: Date): Date[] {
     currentDate.setDate(mondayDate.getDate() + i)
     weekDates.push(currentDate)
   }
-  console.log(weekDates)
 
   return weekDates
 }
@@ -24,5 +23,7 @@ export const WeeklyEventColumns: React.FC = () => {
   const selectedDate = useSelectedDateStore((state) => state.selectedDate)
   const weekDates = getWeekDates(selectedDate)
 
-  return weekDates.map((selectedDate) => <DailyEventColumn date={selectedDate} />)
+  return weekDates.map((selectedDate, index) => (
+    <DailyEventColumn key={index} date={selectedDate} />
+  ))
 }

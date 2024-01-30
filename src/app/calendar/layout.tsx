@@ -1,7 +1,7 @@
+"use client"
 import { CalendarViewDropdown } from "src/components/calendar/CalendarViewDropdown"
 import { CalendarChildrenProps } from "src/types"
 import { HourLabels } from "src/components/calendar/HourLabels"
-import { WeeklyEventColumns } from "src/components/calendar/week/WeeklyEventColumns"
 import { DateSwitcher } from "src/components/calendar/DateSwitcher"
 
 const CalendarLayout: React.FC<CalendarChildrenProps> = ({ children }) => {

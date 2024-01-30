@@ -1,5 +1,4 @@
 "use client"
-import { useState } from "react"
 import { Events } from "src/components/calendar/Events"
 import { localeDate } from "src/utils/utils"
 import { events } from "src/utils/sampleEvents"
@@ -13,12 +12,13 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
 
   return (
     <div className="flex" id={localeDate(selectedDate)} key={localeDate(selectedDate)}>
-      {types.map((type) => (
-        <>
-          <div className="relative flex w-[100px] flex-col justify-evenly border-l border-slate-400">
-            <Events date={selectedDate} events={events} type={type} />
-          </div>
-        </>
+      {types.map((type, index) => (
+        <div
+          key={index}
+          className="relative flex w-[100px] flex-col justify-evenly border-l border-slate-400"
+        >
+          <Events date={selectedDate} events={events} type={type} />
+        </div>
       ))}
     </div>
   )

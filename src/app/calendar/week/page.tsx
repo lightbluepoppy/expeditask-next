@@ -1,12 +1,10 @@
-// import { CalendarLayout } from "src/components/calendar/CalendarLayout"
-import CalendarLayout from "src/app/calendar/layout"
-import { WeeklyEventColumns } from "src/components/calendar/week/WeeklyEventColumns"
+import { WeeklyEventColumns } from "src/components/calendar/WeeklyEventColumns"
 
 const WeeklyCalendar = async () => {
   return (
-    <CalendarLayout>
+    <>
       <WeeklyEventColumns />
-    </CalendarLayout>
+    </>
   )
 }
 

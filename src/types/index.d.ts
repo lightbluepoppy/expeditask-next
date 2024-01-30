@@ -74,9 +74,9 @@ export type SelectedEventStore = {
   setSelectedEvent: (eventID: selectTask.taskID) => void
 }
 
-import { DailyView } from "src/components/calendar/day/DailyView"
-import { WeeklyView } from "src/components/calendar/week/WeeklyView"
+import { DailyEventColumn } from "src/components/calendar/DailyEventColumn"
+import { WeeklyEventColumns } from "src/components/calendar/WeeklyEventColumns"
 
 export type CalendarChildrenProps = {
-  children: DailyView | WeeklyView
+  children: DailyEventColumn | WeeklyEventColumns
 }

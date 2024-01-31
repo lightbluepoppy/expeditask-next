@@ -2,9 +2,9 @@
 import { MenuRadioGroupProps } from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 import { useState } from "react"
-import { capitalize } from "src/utils/utils"
+import { toCapitalize } from "src/utils/utils"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 
 import { Button } from "src/components/ui/button"
 import {
@@ -16,14 +16,19 @@ import {
 } from "src/components/ui/dropdown-menu"
 
 export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
-  const [calendarView, setCalendarView] = useState<string>("day")
-  const views = ["day", "week"]
   const router = useRouter()
+  const pathname = usePathname()
+  const viewname = pathname.replace("/calendar/", "")
+
+  const [calendarView, setCalendarView] = useState<string>(viewname)
+  const views = ["day", "week"]
+
+  const handleClick = (view: string) => () => router.push(`/calendar/${view}`)
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{capitalize(calendarView!)}</Button>
+        <Button variant="outline">{toCapitalize(calendarView)}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuRadioGroup value={calendarView} onValueChange={setCalendarView}>
@@ -31,10 +36,10 @@ export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
             <DropdownMenuRadioItem
               key={index}
               value={view}
-              onClick={() => router.push(`/calendar/${view}`)}
+              onClick={handleClick(view)}
               style={{ cursor: "pointer" }}
             >
-              {capitalize(view)}
+              {toCapitalize(view)}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

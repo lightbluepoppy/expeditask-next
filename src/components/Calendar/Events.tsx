@@ -1,8 +1,10 @@
 "use client"
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef, RefObject, createRef, forwardRef } from "react"
+import { useClickAway } from "react-use"
 import { TimeType, EventProps } from "src/types"
 import { localeTime, localeDate } from "src/utils/utils"
 import { CalendarEvent } from "src/types"
+import { useSelectedEventStore } from "src/stores/stores"
 
 export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type }) => {
   const eventKey = type === "scheduled" ? "scheduled" : "recorded"
@@ -77,20 +79,68 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
     return { eventStartTime, eventEndTime, top, height }
   }
 
-  return filteredEvents.map((event) => {
+  const selectedEventID = useSelectedEventStore((state) => state.selectedEventID)
+  const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
+
+  // const eventRefs = useRef<RefObject<HTMLDivElement>[]>(
+  //   filteredEvents.map(() => createRef<HTMLInputElement>()),
+  // )
+  const eventRefs = filteredEvents.map(() => useRef<RefObject<HTMLDivElement>[]>())
+
+  return filteredEvents.map((event, index) => {
     const { eventStartTime, eventEndTime, top, height } = useMemo(
       () => eventComponentInfo(event),
       [event],
     )
 
+    // const ref = eventRefs[index]
+    const ref = useRef<HTMLDivElement>(null)
+
+    const eventComponentID = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
+
+    // useClickAway(ref, () => {
+    //   console.log("OUTSIDE CLICKED")
+    //   setSelectedEvent("")
+    // })
+
+    // useClickAway(ref.current[index], () => {
+    //   console.log("OUTSIDE CLICKED")
+    //   setSelectedEvent("")
+    // })
+
+    // const ref = useClickAway(() => {
+    //   console.log("OUTSIDE CLICKED")
+    //   setSelectedEvent("")
+    // })
+
+    const handleEventClick = () => () => {
+      // setSelectedEvent(selectedEventID === "" ? eventComponentID : "")
+      setSelectedEvent(eventComponentID)
+      console.log(eventComponentID)
+    }
+
+    // const handleClickOutside = (e) => {
+    //   if (ref.current && !ref.current.contains(e.target as HTMLDivElement)) {
+    //     setSelectedEvent("")
+    //   }
+    // }
+
     return (
       <div
-        key={event.id}
         className="absolute w-full pr-1"
-        style={{ top: `${top}%`, height: `${height}%` }}
-        // onClick={handleEditorOpen}
+        style={{
+          top: `${top}%`,
+          height: `${height}%`,
+        }}
       >
-        <div className="outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2">
+        <div
+          key={eventComponentID}
+          // ref={eventRefs.current[index]}
+          ref={ref}
+          className={`outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2 ${eventComponentID === selectedEventID ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          onClick={handleEventClick()}
+          // onClick={(e) => handleClickOutside(e)}
+        >
           <h3 className="text-sm font-bold">{event.title}</h3>
           <p className="text-xs">{localeDate(eventStartTime)}</p>
           <p className="text-xs">{localeTime(eventStartTime)}</p>

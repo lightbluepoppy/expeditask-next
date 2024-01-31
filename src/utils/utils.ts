@@ -24,6 +24,6 @@ export function localeTime(date: Date) {
   })
 }
 
-export function capitalize(text: string) {
+export function toCapitalize(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }

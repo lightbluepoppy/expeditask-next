@@ -1,19 +1,11 @@
-"use client"
-import { CalendarViewDropdown } from "src/components/calendar/CalendarViewDropdown"
-import { CalendarChildrenProps } from "src/types"
-import { HourLabels } from "src/components/calendar/HourLabels"
-import { DateSwitcher } from "src/components/calendar/DateSwitcher"
+import { Props } from "src/types"
+import { Calendar } from "src/components/calendar/Calendar"
 
-const CalendarLayout: React.FC<CalendarChildrenProps> = ({ children }) => {
+const CalendarLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="h-fit w-full bg-pink-100">
-      <CalendarViewDropdown />
-      <div className="relative flex h-[1000px] w-screen flex-row">
-        <HourLabels />
-        {children}
-      </div>
-      <DateSwitcher />
-    </div>
+    <>
+      <Calendar>{children}</Calendar>
+    </>
   )
 }
 

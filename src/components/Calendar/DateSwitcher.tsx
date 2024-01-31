@@ -5,19 +5,19 @@ import { localeDate } from "src/utils/utils"
 export const DateSwitcher: React.FC = () => {
   const selectedDate = useSelectedDateStore((state) => state.selectedDate)
   const setSelectedDate = useSelectedDateStore((state) => state.setSelectedDate)
-  const changeSelectedDate = useSelectedDateStore((state) => state.changeSelectedDate)
+  const changeSelectedDateBy = useSelectedDateStore((state) => state.changeSelectedDateBy)
 
   return (
     <div className="flex flex-col items-center">
       <div className="flex items-center justify-center space-x-4 p-4">
         <button
-          onClick={() => changeSelectedDate(-7)}
+          onClick={() => changeSelectedDateBy(-7)}
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           &lt;&lt;
         </button>
         <button
-          onClick={() => changeSelectedDate(-1)}
+          onClick={() => changeSelectedDateBy(-1)}
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           &lt;
@@ -29,13 +29,13 @@ export const DateSwitcher: React.FC = () => {
           .
         </button>
         <button
-          onClick={() => changeSelectedDate(1)}
+          onClick={() => changeSelectedDateBy(1)}
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           &gt;
         </button>
         <button
-          onClick={() => changeSelectedDate(7)}
+          onClick={() => changeSelectedDateBy(7)}
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           &gt;&gt;

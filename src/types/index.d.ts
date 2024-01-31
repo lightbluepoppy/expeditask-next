@@ -44,14 +44,14 @@ export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
 export type CalendarView = "day" | "week"
 
+export type Props = {
+  children?: React.ReactNode
+}
+
 export type EventProps = {
   date: Date
   events: CalendarEvent[]
   type: EventType
-}
-
-export type Props = {
-  children?: React.ReactNode
 }
 
 export type DailyEventColumProps = {
@@ -66,17 +66,10 @@ export type EventEditorProps = {
 export type SelectedDateStore = {
   selectedDate: Date
   setSelectedDate: (date: Date) => void
-  changeSelectedDate: (day: number) => void
+  changeSelectedDateBy: (day: number) => void
 }
 
 export type SelectedEventStore = {
-  selectedEvent: SelectTask.taskID
+  selectedEventID: SelectTask.taskID
   setSelectedEvent: (eventID: selectTask.taskID) => void
-}
-
-import { DailyEventColumn } from "src/components/calendar/DailyEventColumn"
-import { WeeklyEventColumns } from "src/components/calendar/WeeklyEventColumns"
-
-export type CalendarChildrenProps = {
-  children: DailyEventColumn | WeeklyEventColumns
 }

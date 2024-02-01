@@ -4,6 +4,7 @@ import { localeDate } from "src/utils/utils"
 import { events } from "src/utils/sampleEvents"
 import { EventType, DailyEventColumProps } from "src/types"
 import { useSelectedDateStore } from "src/stores/stores"
+import { useScratch } from "react-use"
 
 export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =

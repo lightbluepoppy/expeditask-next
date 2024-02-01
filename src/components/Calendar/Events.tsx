@@ -93,7 +93,6 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
     const eventComponentID = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
 
     const handleEventClick = () => () => {
-      // setSelectedEvent(selectedEventID === "" ? eventComponentID : "")
       setSelectedEvent({
         id: eventComponentID,
         title: event.title,
@@ -105,6 +104,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
 
     return (
       <div
+        key={eventComponentID}
         className="absolute w-full pr-1"
         style={{
           top: `${top}%`,
@@ -112,12 +112,9 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
         }}
       >
         <div
-          key={eventComponentID}
-          // ref={eventRefs.current[index]}
           ref={ref}
-          className={`outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer overflow-hidden rounded-sm bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={handleEventClick()}
-          // onClick={(e) => handleClickOutside(e)}
         >
           <h3 className="text-sm font-bold">{event.title}</h3>
           <p className="text-xs">{localeDate(eventStartTime)}</p>

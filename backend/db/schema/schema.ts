@@ -23,10 +23,9 @@ export const accounts = mysqlTable(
   "account",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
-    // .references(() => users.id, { onDelete: "cascade" }),
     type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    providerAccountId: varchar("provider-account-id", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
     expires_at: int("expires_at"),
@@ -36,7 +35,6 @@ export const accounts = mysqlTable(
     session_state: varchar("session_state", { length: 255 }),
   },
   (account) => ({
-    // compoundKey: primaryKey(account.provider, account.providerAccountId),
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
@@ -63,12 +61,12 @@ export const verificationTokens = mysqlTable(
   }),
 )
 
-export const tasks = mysqlTable("tasks", {
-  taskID: varchar("task_id", { length: 255 })
+export const events = mysqlTable("events", {
+  eventID: varchar("event_id", { length: 255 })
     .$defaultFn(() => createId())
     .primaryKey(),
-  // userID: varchar("task_author_id", { length: 255 }).references(() => users.userID),
-  userID: varchar("task_author_id", { length: 255 }),
+  // userID: varchar("event_author_id", { length: 255 }).references(() => users.userID),
+  userID: varchar("event_author_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -78,10 +76,10 @@ export const tasks = mysqlTable("tasks", {
   imageURL: varchar("image_url", { length: 255 }),
 })
 
-export const taskInstances = mysqlTable("task_instances", {
-  taskInstanceID: varchar("task_instance_id", { length: 255 }).primaryKey(),
-  // taskID: varchar("task_id", { length: 255 }).references(() => tasks.taskID),
-  taskID: varchar("task_id", { length: 255 }),
+export const eventInstances = mysqlTable("event_instances", {
+  eventInstanceID: varchar("event_instance_id", { length: 255 }).primaryKey(),
+  // eventID: varchar("event_id", { length: 255 }).references(() => events.eventID),
+  eventID: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -89,16 +87,16 @@ export const taskInstances = mysqlTable("task_instances", {
   isDoable: boolean("is_doable"),
 })
 
-export const taskInstanceTimeEntry = mysqlTable("task_instance_time_entry", {
-  taskInstanceID: varchar("task_instance_id", { length: 255 }).unique(),
+export const eventInstanceTimeEntry = mysqlTable("event_instance_time_entry", {
+  eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
   scheduledStartTime: timestamp("scheduled_start_time"),
   scheduledEndTime: timestamp("scheduled_end_time"),
   recordedStartTime: timestamp("recorded_start_time"),
   recordedEndTime: timestamp("recorded_end_time"),
 })
 
-export const taskInstanceStatistics = mysqlTable("task_statistics", {
-  taskInstanceID: varchar("task_instance_id", { length: 255 }).unique(),
+export const eventInstanceStatistics = mysqlTable("event_statistics", {
+  eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
   goalTitle: varchar("goal_title", { length: 255 }),
   goalValue: int("goal_value"),
   goalValueUnit: varchar("goal_value_unit", { length: 255 }),
@@ -106,28 +104,28 @@ export const taskInstanceStatistics = mysqlTable("task_statistics", {
   note: json("note"),
 })
 
-export const taskDependency = mysqlTable("task_dependency", {
-  dependantTaskID: varchar("dependant_task_id", { length: 255 }).unique(),
-  dependencyTaskID: varchar("dependency_task_id", { length: 255 }),
+export const eventDependency = mysqlTable("event_dependency", {
+  dependantEventID: varchar("dependant_event_id", { length: 255 }).unique(),
+  dependencyEventID: varchar("dependency_event_id", { length: 255 }),
 })
 
-export const taskInstanceDependency = mysqlTable("task_instance_dependency", {
-  dependantTaskInstanceID: varchar("dependant_task_instance_id", {
+export const eventInstanceDependency = mysqlTable("event_instance_dependency", {
+  dependantEventInstanceID: varchar("dependant_event_instance_id", {
     length: 255,
   }).unique(),
-  dependencyTaskInstanceID: varchar("dependency_task_instance_id", {
+  dependencyEventInstanceID: varchar("dependency_event_instance_id", {
     length: 255,
   }),
 })
 
-export const taskTree = mysqlTable("task_tree", {
-  parentTaskID: varchar("parent_task_id", { length: 255 }).unique(),
-  childTaskInstanceID: varchar("child_task_id", { length: 255 }),
+export const eventTree = mysqlTable("event_tree", {
+  parentEventID: varchar("parent_event_id", { length: 255 }).unique(),
+  childEventInstanceID: varchar("child_event_id", { length: 255 }),
 })
 
-export const taskInstanceTree = mysqlTable("task_instance_tree", {
-  parentTaskInstanceID: varchar("parent_task_instance_id", { length: 255 }).unique(),
-  childTaskID: varchar("child_task_instance_id", { length: 255 }),
+export const eventInstanceTree = mysqlTable("event_instance_tree", {
+  parentEventInstanceID: varchar("parent_event_instance_id", { length: 255 }).unique(),
+  childEventID: varchar("child_event_instance_id", { length: 255 }),
 })
 
 export const tags = mysqlTable("tags", {
@@ -150,7 +148,7 @@ export const tagTree = mysqlTable("tag_tree", {
 export const userRelations = relations(users, ({ one, many }) => ({
   account: one(accounts),
   session: one(sessions),
-  tasks: many(tasks),
+  events: many(events),
   tags: many(tags),
 }))
 
@@ -168,81 +166,85 @@ export const sessionRelations = relations(sessions, ({ one }) => ({
   }),
 }))
 
-export const taskRelations = relations(tasks, ({ one, many }) => ({
+export const eventRelations = relations(events, ({ one, many }) => ({
   user: one(users, {
-    fields: [tasks.userID],
+    fields: [events.userID],
     references: [users.id],
   }),
-  taskInstances: many(taskInstances),
-  taskDependency: one(taskDependency),
-  taskTree: one(taskTree),
+  eventInstances: many(eventInstances),
+  eventDependency: one(eventDependency),
+  eventTree: one(eventTree),
   tags: many(tags),
 }))
 
-export const taskInstanceRelations = relations(taskInstances, ({ one }) => ({
-  task: one(tasks, {
-    fields: [taskInstances.taskID],
-    references: [tasks.taskID],
+export const eventInstanceRelations = relations(eventInstances, ({ one }) => ({
+  event: one(events, {
+    fields: [eventInstances.eventID],
+    references: [events.eventID],
   }),
-  taskInstanceTimeEntry: one(taskInstanceTimeEntry),
-  taskInstanceStatistics: one(taskInstanceStatistics),
-  taskInstanceDependency: one(taskInstanceDependency),
-  taskInstanceTree: one(taskInstanceTree),
+  eventInstanceTimeEntry: one(eventInstanceTimeEntry),
+  eventInstanceStatistics: one(eventInstanceStatistics),
+  eventInstanceDependency: one(eventInstanceDependency),
+  eventInstanceTree: one(eventInstanceTree),
 }))
 
-// export const taskInstanceTimeEntryRelations = relations(
-//     taskInstanceTimeEntry,
+// export const eventInstanceTimeEntryRelations = relations(
+//     eventInstanceTimeEntry,
 //     ({ one }) => ({
-//         taskInstance: one(taskInstances, {
-//             fields: [taskInstanceTimeEntry.taskInstanceID],
-//             references: [taskInstances.taskInstanceID],
+//         eventInstance: one(eventInstances, {
+//             fields: [eventInstanceTimeEntry.eventInstanceID],
+//             references: [eventInstances.eventInstanceID],
 //         }),
 //     }),
 // )
 
-export const taskDependencyRelations = relations(taskDependency, ({ many }) => ({
-  // tasks: many(tasks, {
-  //     fields: [taskDependency.dependantTaskID],
-  //     references: [tasks.taskID],
-  //     relationName: "taskDependency",
+export const eventDependencyRelations = relations(eventDependency, ({ many }) => ({
+  // events: many(events, {
+  //     fields: [eventDependency.dependantEventID],
+  //     references: [events.eventID],
+  //     relationName: "eventDependency",
   // }),
-  tasks: many(tasks),
+  events: many(events),
 }))
 
-export const taskTreeRelations = relations(taskTree, ({ many }) => ({
-  tasks: many(tasks),
+export const eventTreeRelations = relations(eventTree, ({ many }) => ({
+  events: many(events),
 }))
 
-export const taskInstanceDependencyRelations = relations(
-  taskInstanceDependency,
+export const eventInstanceDependencyRelations = relations(
+  eventInstanceDependency,
   ({ many }) => ({
-    taskInstances: many(taskInstances),
+    eventInstances: many(eventInstances),
   }),
 )
 
-export const taskInstanceTreeRelations = relations(taskInstanceTree, ({ many }) => ({
-  taskInstances: many(taskInstances),
+export const eventInstanceTreeRelations = relations(eventInstanceTree, ({ many }) => ({
+  eventInstances: many(eventInstances),
 }))
 
 export const tagRelations = relations(tags, ({ one, many }) => ({
-  tasks: many(tasks),
+  events: many(events),
   user: one(users),
 }))
 
 export type InsertUser = InferInsertModel<typeof users>
 export type SelectUser = InferSelectModel<typeof users>
 
-export type InsertTask = InferInsertModel<typeof tasks>
-export type SelectTask = InferSelectModel<typeof tasks>
+export type InsertEvent = InferInsertModel<typeof events>
+export type SelectEvent = InferSelectModel<typeof events>
 
-export type InsertTaskInstance = InferInsertModel<typeof taskInstances>
-export type SelectTaskInstance = InferSelectModel<typeof taskInstances>
+export type InsertEventInstance = InferInsertModel<typeof eventInstances>
+export type SelectEventInstance = InferSelectModel<typeof eventInstances>
 
-export type InsertTaskInstanceTimeEntry = InferInsertModel<typeof taskInstanceTimeEntry>
-export type SelectTaskInstanceTimeEntry = InferSelectModel<typeof taskInstanceTimeEntry>
+export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
+export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
 
-export type InsertTaskInstanceStatistics = InferInsertModel<typeof taskInstanceStatistics>
-export type SelectTaskInstanceStatistics = InferSelectModel<typeof taskInstanceStatistics>
+export type InsertEventInstanceStatistics = InferInsertModel<
+  typeof eventInstanceStatistics
+>
+export type SelectEventInstanceStatistics = InferSelectModel<
+  typeof eventInstanceStatistics
+>
 
 export type InsertTags = InferInsertModel<typeof tags>
 export type SelectTags = InferSelectModel<typeof tags>

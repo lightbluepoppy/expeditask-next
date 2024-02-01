@@ -1,6 +1,5 @@
 "use client"
 import * as React from "react"
-import { useEffect, useRef } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Button } from "src/components/ui/button"
 import {
@@ -11,21 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "src/components/ui/card"
-import { Input } from "src/components/ui/input"
-import { Label } from "src/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "src/components/ui/select"
 import { useSelectedEventStore } from "src/stores/stores"
-import { localeTime } from "src/utils/utils"
+import { localeDate, localeTime } from "src/utils/utils"
+import { X } from "lucide-react"
 
 export const EventEditor: React.FC = () => {
-  // const selectedEventID = useSelectedEventStore((state) => state.selectedEventID)
-  // const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
@@ -36,7 +25,7 @@ export const EventEditor: React.FC = () => {
     <AnimatePresence>
       {selectedEvent.id !== "" && (
         <motion.div
-          key="event-editor"
+          key={`event-editor-${id}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -45,21 +34,44 @@ export const EventEditor: React.FC = () => {
         >
           <Card>
             <CardHeader>
-              <CardTitle>{title}</CardTitle>
-              <CardDescription>
-                <form className="flex w-28 flex-row justify-start gap-1">
+              <div id="utility-buttons" className="flex flex-row justify-end">
+                <X
+                  className="cursor-pointer text-gray-500"
+                  onClick={() => resetSelectedEvent()}
+                />
+              </div>
+              <CardTitle>
+                <form className="flex w-full flex-row justify-start gap-1">
                   <input
-                    className="w-10 outline-none"
+                    className="w-full bg-none outline-none transition duration-300 ease-in-out focus:bg-gray-100"
+                    defaultValue={title}
+                  ></input>
+                </form>
+              </CardTitle>
+              <CardContent className="p-0">
+                <form className="flex w-28 flex-row justify-start gap-1 text-sm text-slate-500">
+                  <input
+                    className="w-20 outline-none transition duration-300 ease-in-out focus:bg-gray-100"
+                    defaultValue={localeDate(startTime)}
+                  ></input>
+                  <input
+                    className="w-10 outline-none transition duration-300 ease-in-out focus:bg-gray-100"
                     defaultValue={localeTime(startTime)}
                   ></input>
-                  <span>-</span>
+                  -
+                </form>
+                <form className="flex w-28 flex-row justify-start gap-1 text-sm text-slate-500">
                   <input
-                    className="w-10 outline-none"
+                    className="w-20 outline-none transition duration-300 ease-in-out focus:bg-gray-100"
+                    defaultValue={localeDate(endTime)}
+                  ></input>
+                  <input
+                    className="w-10 outline-none transition duration-300 ease-in-out focus:bg-gray-100"
                     defaultValue={localeTime(endTime)}
                   ></input>
                 </form>
-                {/* {localeTime(startTime)} - {localeTime(endTime)} */}
-              </CardDescription>
+              </CardContent>
+              {/* {localeTime(startTime)} - {localeTime(endTime)} */}
             </CardHeader>
             {/* <CardContent> */}
             {/*   <form> */}
@@ -86,12 +98,10 @@ export const EventEditor: React.FC = () => {
             {/*   </form> */}
             {/* </CardContent> */}
             <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => resetSelectedEvent()}>
-                Cancel
-              </Button>
-              <Button onSubmit={(e) => setSelectedEvent({ startTime: e.target })}>
-                Save
-              </Button>
+              <Button variant="destructive">Delete</Button>
+              {/* <Button onSubmit={(e) => setSelectedEvent({ startTime: e.target })}> */}
+              {/*   Save */}
+              {/* </Button> */}
             </CardFooter>
           </Card>
         </motion.div>

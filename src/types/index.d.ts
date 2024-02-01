@@ -63,6 +63,14 @@ export type EventEditorProps = {
   top: number
 }
 
+export type EventComponentProps = {
+  id: CalendarEvent.id
+  title: CalendarEvent.title
+  // type: TimeType
+  startTime: CalendarEvent.scheduledStartTime | CalendarEvent.recordedStartTime
+  endTime: CalendarEvent.scheduledEndTime | CalendarEvent.recordedEndTime
+}
+
 export type SelectedDateStore = {
   selectedDate: Date
   setSelectedDate: (date: Date) => void
@@ -70,6 +78,7 @@ export type SelectedDateStore = {
 }
 
 export type SelectedEventStore = {
-  selectedEventID: SelectTask.taskID
-  setSelectedEvent: (eventID: selectTask.taskID) => void
+  selectedEvent: EventComponentProps
+  setSelectedEvent: (event: EventComponentProps) => void
+  resetSelectedEvent: () => void
 }

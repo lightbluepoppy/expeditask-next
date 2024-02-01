@@ -79,13 +79,8 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
     return { eventStartTime, eventEndTime, top, height }
   }
 
-  const selectedEventID = useSelectedEventStore((state) => state.selectedEventID)
+  const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
-
-  // const eventRefs = useRef<RefObject<HTMLDivElement>[]>(
-  //   filteredEvents.map(() => createRef<HTMLInputElement>()),
-  // )
-  const eventRefs = filteredEvents.map(() => useRef<RefObject<HTMLDivElement>[]>())
 
   return filteredEvents.map((event, index) => {
     const { eventStartTime, eventEndTime, top, height } = useMemo(
@@ -93,37 +88,20 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       [event],
     )
 
-    // const ref = eventRefs[index]
     const ref = useRef<HTMLDivElement>(null)
 
     const eventComponentID = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
 
-    // useClickAway(ref, () => {
-    //   console.log("OUTSIDE CLICKED")
-    //   setSelectedEvent("")
-    // })
-
-    // useClickAway(ref.current[index], () => {
-    //   console.log("OUTSIDE CLICKED")
-    //   setSelectedEvent("")
-    // })
-
-    // const ref = useClickAway(() => {
-    //   console.log("OUTSIDE CLICKED")
-    //   setSelectedEvent("")
-    // })
-
     const handleEventClick = () => () => {
       // setSelectedEvent(selectedEventID === "" ? eventComponentID : "")
-      setSelectedEvent(eventComponentID)
+      setSelectedEvent({
+        id: eventComponentID,
+        title: event.title,
+        startTime: eventStartTime,
+        endTime: eventEndTime,
+      })
       console.log(eventComponentID)
     }
-
-    // const handleClickOutside = (e) => {
-    //   if (ref.current && !ref.current.contains(e.target as HTMLDivElement)) {
-    //     setSelectedEvent("")
-    //   }
-    // }
 
     return (
       <div
@@ -137,7 +115,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
           key={eventComponentID}
           // ref={eventRefs.current[index]}
           ref={ref}
-          className={`outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2 ${eventComponentID === selectedEventID ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer overflow-hidden rounded bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={handleEventClick()}
           // onClick={(e) => handleClickOutside(e)}
         >

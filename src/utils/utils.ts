@@ -5,7 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function localeDate(date: Date): string {
+export function localeDate(date: Date | string): string {
+  if (typeof date === "string") date = new Date(date)
   return date.toLocaleDateString("ja-JP", {
     year: "numeric",
     month: "2-digit",
@@ -15,7 +16,8 @@ export function localeDate(date: Date): string {
   // .join("-")
 }
 
-export function localeTime(date: Date): string {
+export function localeTime(date: Date | string): string {
+  if (typeof date === "string") date = new Date(date)
   return date.toLocaleTimeString("en-US", {
     hour12: false,
     hour: "2-digit",

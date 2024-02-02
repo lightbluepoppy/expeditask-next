@@ -17,9 +17,9 @@ import {
 export const CalendarViewDropdown: React.FC<MenuRadioGroupProps> = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const viewname = pathname.replace("/calendar/", "")
+  const viewName = pathname.replace("/calendar/", "")
 
-  const [calendarView, setCalendarView] = useState<string>(viewname)
+  const [calendarView, setCalendarView] = useState<string>(viewName)
   const views = ["day", "week"]
 
   const handleClick = (view: string) => () => router.push(`/calendar/${view}`)

@@ -1,35 +1,34 @@
 import {
-  InsertUser,
-  SelectUser,
-  InsertTask,
-  SelectTask,
-  InsertTaskInstance,
-  SelectTaskInstance,
-  InsertTaskInstanceTimeEntry,
-  SelectTaskInstanceTimeEntry,
-  InsertTaskInstanceStatistics,
-  SelectTaskInstanceStatistics,
-  InsertTags,
-  SelectTags,
+  users,
+  events,
+  eventInstances,
+  eventInstanceTimeEntry,
+  eventInstanceStatistics,
+  tags,
 } from "backend/db/schema/schema"
+import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
-export type InsertUser = InsertUser
-export type SelectUser = SelectUser
+export type InsertUser = InferInsertModel<typeof users>
+export type SelectUser = InferSelectModel<typeof users>
 
-export type InsertTask = InsertTask
-export type SelectTask = SelectTask
+export type InsertEvent = InferInsertModel<typeof events>
+export type SelectEvent = InferSelectModel<typeof events>
 
-export type InsertTaskInstance = InsertTaskInstance
-export type SelectTaskInstance = SelectTaskInstance
+export type InsertEventInstance = InferInsertModel<typeof eventInstances>
+export type SelectEventInstance = InferSelectModel<typeof eventInstances>
 
-export type InsertTaskInstanceTimeEntry = InsertTaskInstanceTimeEntry
-export type SelectTaskInstanceTimeEntry = SelectTaskInstanceTimeEntry
+export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
+export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
 
-export type InsertTaskInstanceStatistics = InsertTaskInstanceStatistics
-export type SelectTaskInstanceStatistics = SelectTaskInstanceStatistics
+export type InsertEventInstanceStatistics = InferInsertModel<
+  typeof eventInstanceStatistics
+>
+export type SelectEventInstanceStatistics = InferSelectModel<
+  typeof eventInstanceStatistics
+>
 
-export type InsertTags = InsertTags
-export type SelectTags = SelectTags
+export type InsertTags = InferInsertModel<typeof tags>
+export type SelectTags = InferSelectModel<typeof tags>
 
 export type CalendarEvent = {
   id: string
@@ -64,11 +63,10 @@ export type EventEditorProps = {
 }
 
 export type EventComponentProps = {
-  id: CalendarEvent.id
-  title: CalendarEvent.title
-  // type: TimeType
-  startTime: CalendarEvent.scheduledStartTime | CalendarEvent.recordedStartTime
-  endTime: CalendarEvent.scheduledEndTime | CalendarEvent.recordedEndTime
+  id: CalendarEvent["id"]
+  title: CalendarEvent["title"]
+  startTime: CalendarEvent["scheduledStartTime"] | CalendarEvent["recordedStartTime"]
+  endTime: CalendarEvent["scheduledEndTime"] | CalendarEvent["recordedEndTime"]
 }
 
 export type SelectedDateStore = {

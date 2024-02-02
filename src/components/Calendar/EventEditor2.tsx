@@ -25,34 +25,25 @@ const EventDateInput: React.FC<EventDateInputProps> = ({ className, data }) => (
   ></input>
 )
 
-// type EventDateInputProps2 = {
-//   time: string
-// }
-
-// const EventDateInput2: React.FC<EventDateInputProps2> = ({ time }) => (
-//   <input
-//     className={`${className} outline-none transition duration-300 ease-in-out focus:bg-gray-100`}
-//     defaultValue={data}
-//   ></input>
-// )
-
-export const EventEditor: React.FC = () => {
+export const EventEditor2: React.FC = () => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
 
   const { id, title, startTime, endTime } = selectedEvent
 
+  const width = "500px"
+
   return (
     <AnimatePresence>
       {selectedEvent.id !== "" && (
         <motion.div
           key={`event-editor-${id}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute w-[350px] rounded-lg shadow-xl"
-          style={{ top: `${20}%` }}
+          initial={{ right: `-${width}`, opacity: 0 }}
+          animate={{ right: 0, opacity: 1 }}
+          exit={{ right: `-${width}`, opacity: 0 }}
+          className="fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
+          style={{ width: width }}
         >
           <Card>
             <CardHeader>

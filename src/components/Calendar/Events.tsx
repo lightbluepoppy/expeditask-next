@@ -113,7 +113,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       >
         <div
           ref={ref}
-          className={`outline-solid h-full cursor-pointer overflow-hidden rounded-sm bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={handleEventClick()}
         >
           <h3 className="text-sm font-bold">{event.title}</h3>

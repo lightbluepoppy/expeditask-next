@@ -45,7 +45,7 @@ export type TimeType = "start" | "end"
 export type CalendarView = "day" | "week"
 
 export type Props = {
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 export type EventProps = {

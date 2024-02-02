@@ -9,24 +9,28 @@ import { Label } from "src/components/ui/label"
 import { FiGithub } from "react-icons/fi"
 import { LuLoader2 } from "react-icons/lu"
 import { FcGoogle } from "react-icons/fc"
+import { useRouter } from "next/navigation"
+import { getServerSideProps } from "src/utils/auth"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  // const router = useRouter()
+  // const providers = await getServerSideProps()
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  const handleLogin = (provider: string) => () => {
+    // router.push("/api/auth/singin" + pathname)
+    signIn(provider, { callbackUrl: `http://localhost:3000/calendar/day` })
   }
+
+  const { data: session, status } = useSession()
+  console.log(status)
 
   return (
     <div className={cn("grid", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      <form>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -59,21 +63,42 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </span>
           </div>
         </div>
-        <Button variant="outline" type="button" disabled={isLoading} className="text-md">
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          className="text-md"
+          onMouseDown={handleLogin("google")}
+        >
           {isLoading ? (
             <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <FcGoogle className="mr-2 h-6 w-6" />
-          )}{" "}
+          )}
           Google
         </Button>
-        <Button variant="outline" type="button" disabled={isLoading} className="text-md">
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          className="text-md"
+          onMouseDown={handleLogin("")}
+        >
           {isLoading ? (
             <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <FiGithub className="mr-2 h-6 w-6" />
-          )}{" "}
+          )}
           GitHub
+        </Button>
+        <Button
+          variant="default"
+          type="button"
+          disabled={isLoading}
+          className="text-md"
+          onMouseDown={() => signOut()}
+        >
+          Log out
         </Button>
       </div>
     </div>

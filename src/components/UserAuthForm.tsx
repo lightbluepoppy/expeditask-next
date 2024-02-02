@@ -7,7 +7,6 @@ import { Button } from "src/components/ui/button"
 import { Input } from "src/components/ui/input"
 import { Label } from "src/components/ui/label"
 import { FiGithub } from "react-icons/fi"
-import { LuLoader2 } from "react-icons/lu"
 import { FcGoogle } from "react-icons/fc"
 import { useRouter } from "next/navigation"
 import { getServerSideProps } from "src/utils/auth"
@@ -16,12 +15,8 @@ import { signIn, signOut, useSession } from "next-auth/react"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  // const router = useRouter()
-  // const providers = await getServerSideProps()
-
+  // const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const handleLogin = (provider: string) => () => {
-    // router.push("/api/auth/singin" + pathname)
     signIn(provider, { callbackUrl: `http://localhost:3000/calendar/day` })
   }
 
@@ -43,11 +38,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button>
+            {/* {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />} */}
             Sign In with Email
           </Button>
         </div>
@@ -66,35 +60,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <Button
           variant="outline"
           type="button"
-          disabled={isLoading}
           className="text-md"
           onMouseDown={handleLogin("google")}
         >
-          {isLoading ? (
-            <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <FcGoogle className="mr-2 h-6 w-6" />
-          )}
+          {/* {isLoading ? ( */}
+          {/*   <LuLoader2 className="mr-2 h-4 w-4 animate-spin" /> */}
+          {/* ) : ( */}
+          <FcGoogle className="mr-2 h-6 w-6" />
+          {/* )} */}
           Google
         </Button>
         <Button
           variant="outline"
           type="button"
-          disabled={isLoading}
           className="text-md"
           onMouseDown={handleLogin("")}
         >
-          {isLoading ? (
-            <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <FiGithub className="mr-2 h-6 w-6" />
-          )}
+          {/* {isLoading ? ( */}
+          {/*   <LuLoader2 className="mr-2 h-4 w-4 animate-spin" /> */}
+          {/* ) : ( */}
+          <FiGithub className="mr-2 h-6 w-6" />
+          {/* )} */}
           GitHub
         </Button>
         <Button
           variant="default"
           type="button"
-          disabled={isLoading}
           className="text-md"
           onMouseDown={() => signOut()}
         >

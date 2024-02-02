@@ -3,7 +3,6 @@ import { MenuRadioGroupProps } from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 import { useState } from "react"
 import { toCapitalize } from "src/utils/utils"
-import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 
 import { Button } from "src/components/ui/button"

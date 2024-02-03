@@ -34,45 +34,36 @@ type AnimateEditorProps = {
 
 const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, id, previousID }) => {
   const width = "500px"
+  const props = {
+    initial: id !== "" && previousID === "" ? { right: `-${width}`, opacity: 1 } : {},
+    animate:
+      id !== ""
+        ? { right: id !== "" && previousID === "" ? 0 : undefined, opacity: 1 }
+        : { opacity: 1 },
+    exit:
+      id !== "" && previousID === ""
+        ? { right: `-${width}`, opacity: 0 }
+        : { opacity: 0 },
+  }
+
   return (
     <AnimatePresence>
-      {(() => {
-        if (id !== "" && previousID === "") {
-          return (
-            <motion.div
-              key={`event-editor-${id}`}
-              initial={{ right: `-${width}`, opacity: 0 }}
-              animate={{ right: 0, opacity: 1 }}
-              exit={{ right: `-${width}`, opacity: 0 }}
-              className="fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
-              style={{ width: width }}
-            >
-              {children}
-            </motion.div>
-          )
-        }
-
-        if (id !== "" && previousID !== "") {
-          return (
-            <motion.div
-              key={`event-editor-${id}`}
-              animate={{ opacity: 1 }}
-              exit={{ right: `-${width}`, opacity: 0 }}
-              className="fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
-              style={{ width: width }}
-            >
-              {children}
-            </motion.div>
-          )
-        }
-      })()}
+      <motion.div
+        key={`event-editor-${id}`}
+        initial={props.initial}
+        animate={props.animate}
+        exit={props.exit}
+        className="fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
+        style={{ width: width }}
+      >
+        {children}
+      </motion.div>
     </AnimatePresence>
   )
 }
 
 export const EventEditor2: React.FC = () => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
-  const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
 
   const [previousID, setPreviousID] = useState("")

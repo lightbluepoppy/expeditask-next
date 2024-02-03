@@ -1,9 +1,8 @@
 import { Props } from "src/types"
 import { HourLabels } from "src/components/calendar/HourLabels"
 import { DateSwitcher } from "src/components/calendar/DateSwitcher"
-import { EventEditor } from "src/components/calendar/EventEditor"
-import { EventEditor2 } from "src/components/calendar/EventEditor2"
 import { CalendarViewTab } from "src/components/calendar/CalendarViewTab"
+import { EventSideEditor } from "./EventSideEditor"
 
 export const Calendar: React.FC<Props> = ({ children }) => {
   return (
@@ -15,8 +14,7 @@ export const Calendar: React.FC<Props> = ({ children }) => {
       <div className="relative top-10 flex h-[1000px] flex-row">
         <HourLabels />
         <div className="flex h-full w-fit overflow-x-scroll">{children}</div>
-        {/* <EventEditor /> */}
-        <EventEditor2 />
+        <EventSideEditor />
       </div>
     </div>
   )

@@ -29,6 +29,10 @@ export function localeTime(date: Date | string | undefined): string {
   )
 }
 
+export function addMinutes(date: Date, minutes: number) {
+  return new Date(date.getTime() + minutes * 60000)
+}
+
 export function toCapitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }

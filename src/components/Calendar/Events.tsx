@@ -82,7 +82,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
-  return filteredEvents.map((event, index) => {
+  return filteredEvents.map((event) => {
     const { eventStartTime, eventEndTime, top, height } = useMemo(
       () => eventComponentInfo(event),
       [event],
@@ -99,6 +99,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       setSelectedEvent({
         id: eventComponentID,
         title: event.title,
+        type: type,
         startTime: eventStartTime.toISOString(),
         endTime: eventEndTime.toISOString(),
       })

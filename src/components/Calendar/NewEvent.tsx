@@ -7,12 +7,6 @@ import { CalendarEvent } from "src/types"
 import { useSelectedEventStore } from "src/stores/stores"
 
 export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) => {
-  const eventKey = type === "scheduled" ? "scheduled" : "recorded"
-  const eventProperty = (timeType: TimeType) =>
-    (timeType === "start"
-      ? `${eventKey}StartTime`
-      : `${eventKey}EndTime`) as keyof CalendarEvent
-
   const targetDate = selectedDate.getDate()
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   if (!selectedEvent) return
@@ -62,38 +56,30 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
 
   const { eventStartTime, eventEndTime, top, height } = eventComponentInfo()
 
-  const ref = useRef<HTMLDivElement>(null)
+  // const ref = useRef<HTMLDivElement>(null)
 
-  // const handleEventClick = () => () => {
-  //   setSelectedEvent({
-  //     id: eventComponentID,
-  //     title: event.title,
-  //     startTime: eventStartTime.toISOString(),
-  //     endTime: eventEndTime.toISOString(),
-  //   })
-  //   console.log(eventComponentID)
-  // }
-
-  return (
-    <div
-      key="new_event"
-      className="absolute w-full pr-1"
-      style={{
-        top: `${top}%`,
-        height: `${height}%`,
-      }}
-    >
+  if (selectedEvent && selectedDate !== undefined && selectedEvent.type === type) {
+    return (
       <div
-        ref={ref}
-        className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 shadow-2xl transition-shadow duration-200 ease-in-out`}
-        // onClick={handleEventClick()}
+        key="new_event"
+        className="absolute w-full pr-1"
+        style={{
+          top: `${top}%`,
+          height: `${height}%`,
+        }}
       >
-        <h3 className="text-sm font-bold">New {toCapitalize(type)} Event</h3>
-        <p className="text-xs">{localeDate(eventStartTime)}</p>
-        <p className="text-xs">{localeTime(eventStartTime)}</p>
-        <p className="text-xs">{localeDate(eventEndTime)}</p>
-        <p className="text-xs">{localeTime(eventEndTime)}</p>
+        <div
+          // ref={ref}
+          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 shadow-2xl transition-shadow duration-200 ease-in-out`}
+          // onClick={handleEventClick()}
+        >
+          <h3 className="text-sm font-bold">New {toCapitalize(type)} Event</h3>
+          <p className="text-xs">{localeDate(eventStartTime)}</p>
+          <p className="text-xs">{localeTime(eventStartTime)}</p>
+          <p className="text-xs">{localeDate(eventEndTime)}</p>
+          <p className="text-xs">{localeTime(eventEndTime)}</p>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }

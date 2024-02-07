@@ -70,6 +70,7 @@ export type EventEditorProps = {
 export type EventComponentProps = {
   id: CalendarEvent["id"]
   title: CalendarEvent["title"]
+  type: EventType
   startTime: CalendarEvent["scheduledStartTime"] | CalendarEvent["recordedStartTime"]
   endTime: CalendarEvent["scheduledEndTime"] | CalendarEvent["recordedEndTime"]
 }

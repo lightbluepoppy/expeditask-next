@@ -16,6 +16,8 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
+  const [visible, setVisible] = useState(false)
+
   const ref = useRef(null)
 
   const { elY, elH } = useMouseHovered(ref, {
@@ -37,13 +39,18 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
     return startTime
   }
 
-  const handleNewEvent = () => {
+  const handleNewEvent = (type: EventType) => () => {
     setSelectedEvent({
       title: "New Event",
       id: "new_event",
+      type: type,
       startTime: getStartTime(elY, elH).toISOString(),
       endTime: addHours(getStartTime(elY, elH), 2).toISOString(),
     })
+    setVisible(true)
+    if (!selectedEvent) return
+    console.log(startOfDay(selectedDate).toISOString())
+    console.log(startOfDay(selectedEvent.startTime).toISOString())
   }
 
   return (
@@ -53,11 +60,12 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
           ref={ref}
           key={index}
           className="relative flex w-[100px] flex-col justify-evenly overflow-hidden border-l border-slate-400"
-          onClick={handleNewEvent}
+          onClick={handleNewEvent(type)}
         >
-          {selectedEvent && selectedDate !== undefined && (
-            <NewEvent date={selectedDate} type={type} />
-          )}
+          {/* {selectedEvent && selectedDate !== undefined && selectedEvent.type === type && ( */}
+          {/*   <NewEvent date={selectedDate} type={type} /> */}
+          {/* )} */}
+          <NewEvent date={selectedDate} type={type} visible={visible} />
           <Events date={selectedDate} events={events} type={type} />
         </div>
       ))}

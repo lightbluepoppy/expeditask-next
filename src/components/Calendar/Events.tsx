@@ -88,6 +88,8 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       [event],
     )
 
+    const id = selectedEvent === undefined ? undefined : selectedEvent.id
+
     const ref = useRef<HTMLDivElement>(null)
 
     const eventComponentID = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
@@ -96,8 +98,8 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       setSelectedEvent({
         id: eventComponentID,
         title: event.title,
-        startTime: eventStartTime,
-        endTime: eventEndTime,
+        startTime: eventStartTime.toISOString(),
+        endTime: eventEndTime.toISOString(),
       })
       console.log(eventComponentID)
     }
@@ -113,7 +115,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       >
         <div
           ref={ref}
-          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentID === selectedEvent.id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentID === id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={handleEventClick()}
         >
           <h3 className="text-sm font-bold">{event.title}</h3>

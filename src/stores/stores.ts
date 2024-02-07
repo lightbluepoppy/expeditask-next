@@ -11,20 +11,26 @@ export const useSelectedDateStore = create<SelectedDateStore>()((set) => ({
 }))
 
 export const useSelectedEventStore = create<SelectedEventStore>()((set) => ({
-  selectedEvent: {
-    id: "",
-    title: "",
-    startTime: "",
-    endTime: "",
-  },
+  // selectedEvent: {
+  //   id: "",
+  //   title: "",
+  //   startTime: "",
+  //   endTime: "",
+  // },
+  selectedEvent: undefined,
   setSelectedEvent: (event) => set({ selectedEvent: event }),
   resetSelectedEvent: () =>
-    set({
-      selectedEvent: {
-        id: "",
-        title: "",
-        startTime: "",
-        endTime: "",
-      },
-    }),
+    // set({
+    //   selectedEvent: {
+    //     id: "",
+    //     title: "",
+    //     startTime: "",
+    //     endTime: "",
+    //   },
+    // }),
+    set({ selectedEvent: undefined }),
+}))
+
+export const useCreateEventStore = create()((set) => ({
+  // selectedEvent: useSelectedEventStore()
 }))

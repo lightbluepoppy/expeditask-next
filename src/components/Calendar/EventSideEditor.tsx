@@ -16,19 +16,19 @@ import { EventComponentProps } from "src/types"
 
 type AnimateEditorProps = {
   children: React.ReactNode
-  previousID: EventComponentProps["id"]
+  previousID: EventComponentProps["id"] | undefined
 }
 
 const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
-  const id = selectedEvent.id
+  const id = selectedEvent === undefined ? undefined : selectedEvent.id
   const width = "500px"
   const styleProps = "fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
 
   return (
     <AnimatePresence>
       {(() => {
-        if (id !== "" && previousID === "") {
+        if (id !== undefined && previousID === undefined) {
           return (
             <motion.div
               key={`event-editor-${id}`}
@@ -43,7 +43,7 @@ const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) =
           )
         }
 
-        if (id !== "" && previousID !== "") {
+        if (id && previousID !== undefined) {
           return (
             <motion.div
               key={`event-editor-${id}`}
@@ -68,7 +68,13 @@ const EditorCard: React.FC = () => {
     resetSelectedEvent()
   }
 
-  const { title, startTime, endTime } = selectedEvent
+  // const { title, startTime, endTime } =
+  //   selectedEvent === undefined
+  //     ? { title: undefined, startTime: undefined, endTime: undefined }
+  //     : selectedEvent
+
+  const { title, startTime, endTime } = selectedEvent ?? {}
+
   return (
     <Card>
       <CardHeader>
@@ -116,13 +122,14 @@ const EventDateInput: React.FC<EventDateInputProps> = ({ className, data }) => (
 export const EventSideEditor: React.FC = () => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
 
-  const id = selectedEvent.id
+  const id = selectedEvent === undefined ? undefined : selectedEvent.id
 
-  const [previousID, setPreviousID] = useState("")
+  const [previousID, setPreviousID] = useState<string | undefined>()
 
   useEffect(() => {
-    setPreviousID(id)
-    console.log("Side effect")
+    if (id !== undefined) {
+      setPreviousID(id)
+    }
   }, [selectedEvent])
 
   return (

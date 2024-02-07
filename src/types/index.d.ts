@@ -76,7 +76,7 @@ export type SelectedDateStore = {
 }
 
 export type SelectedEventStore = {
-  selectedEvent: EventComponentProps
+  selectedEvent: EventComponentProps | undefined
   setSelectedEvent: (event: EventComponentProps) => void
   resetSelectedEvent: () => void
 }

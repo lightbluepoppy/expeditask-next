@@ -88,7 +88,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       [event],
     )
 
-    const id = selectedEvent === undefined ? undefined : selectedEvent.id
+    const id = selectedEvent?.id || undefined
 
     const ref = useRef<HTMLDivElement>(null)
 

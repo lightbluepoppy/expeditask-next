@@ -21,7 +21,7 @@ type AnimateEditorProps = {
 
 const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
-  const id = selectedEvent === undefined ? undefined : selectedEvent.id
+  const id = selectedEvent?.id || undefined
   const width = "500px"
   const styleProps = "fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
 
@@ -61,17 +61,18 @@ const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) =
   )
 }
 
-const EditorCard: React.FC = () => {
+type EditorCardProps = {
+  // previousID: EventComponentProps["id"] | undefined
+  setPreviousID: (value: React.SetStateAction<string | undefined>) => void
+}
+
+const EditorCard: React.FC<EditorCardProps> = ({ setPreviousID }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
   const handleClose = () => {
     resetSelectedEvent()
+    setPreviousID(undefined)
   }
-
-  // const { title, startTime, endTime } =
-  //   selectedEvent === undefined
-  //     ? { title: undefined, startTime: undefined, endTime: undefined }
-  //     : selectedEvent
 
   const { title, startTime, endTime } = selectedEvent ?? {}
 
@@ -122,7 +123,7 @@ const EventDateInput: React.FC<EventDateInputProps> = ({ className, data }) => (
 export const EventSideEditor: React.FC = () => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
 
-  const id = selectedEvent === undefined ? undefined : selectedEvent.id
+  const id = selectedEvent?.id || undefined
 
   const [previousID, setPreviousID] = useState<string | undefined>()
 
@@ -130,11 +131,11 @@ export const EventSideEditor: React.FC = () => {
     if (id !== undefined) {
       setPreviousID(id)
     }
-  }, [selectedEvent])
+  }, [id])
 
   return (
     <AnimateEditor previousID={previousID}>
-      <EditorCard />
+      <EditorCard setPreviousID={setPreviousID} />
     </AnimateEditor>
   )
 }

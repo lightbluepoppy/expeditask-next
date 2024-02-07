@@ -6,7 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function localeDate(date: Date | string | undefined): string {
-  // if (typeof date === undefined) return
   if (typeof date === "string") date = new Date(date)
   return (
     date?.toLocaleDateString("ja-JP", {

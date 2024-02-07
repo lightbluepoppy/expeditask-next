@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, RefObject, createRef, forwardRef } from "react"
 import { useClickAway } from "react-use"
 import { TimeType, EventProps, NewEventProps } from "src/types"
-import { localeTime, localeDate } from "src/utils/utils"
+import { localeTime, localeDate, toCapitalize } from "src/utils/utils"
 import { CalendarEvent } from "src/types"
 import { useSelectedEventStore } from "src/stores/stores"
 
@@ -15,10 +15,11 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
 
   const targetDate = selectedDate.getDate()
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
+  if (!selectedEvent) return
 
   const eventComponentInfo = () => {
-    const eventStartTime = new Date(selectedEvent?.startTime)
-    const eventEndTime = new Date(selectedEvent?.endTime)
+    const eventStartTime = new Date(selectedEvent.startTime)
+    const eventEndTime = new Date(selectedEvent.endTime)
     const startTimeDate = eventStartTime.getDate()
     const endTimeDate = eventEndTime.getDate()
 
@@ -87,7 +88,7 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
         className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 shadow-2xl transition-shadow duration-200 ease-in-out`}
         // onClick={handleEventClick()}
       >
-        <h3 className="text-sm font-bold">New Event</h3>
+        <h3 className="text-sm font-bold">New {toCapitalize(type)} Event</h3>
         <p className="text-xs">{localeDate(eventStartTime)}</p>
         <p className="text-xs">{localeTime(eventStartTime)}</p>
         <p className="text-xs">{localeDate(eventEndTime)}</p>

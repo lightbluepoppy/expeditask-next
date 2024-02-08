@@ -1,13 +1,10 @@
-"use client"
-import { useEffect, useMemo, useRef, RefObject, createRef, forwardRef } from "react"
-import { useClickAway } from "react-use"
 import { TimeType, EventProps, NewEventProps } from "src/types"
 import { localeTime, localeDate, toCapitalize } from "src/utils/utils"
-import { CalendarEvent } from "src/types"
 import { useSelectedEventStore } from "src/stores/stores"
+import { startOfDay } from "date-fns"
 
-export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) => {
-  const targetDate = selectedDate.getDate()
+export const NewEvent: React.FC<NewEventProps> = ({ date, type }) => {
+  const targetDate = date.getDate()
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   if (!selectedEvent) return
 
@@ -16,6 +13,7 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
     const eventEndTime = new Date(selectedEvent.endTime)
     const startTimeDate = eventStartTime.getDate()
     const endTimeDate = eventEndTime.getDate()
+    const dateDifference = endTimeDate - startTimeDate
 
     // express Date object as maximum 1440 minutes and
     // calculate the ratio
@@ -26,10 +24,7 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
     let bottom =
       ((eventEndTime.getHours() * 60 + eventEndTime.getMinutes()) / (60 * 24)) * 100
 
-    const dateDifference = endTimeDate - startTimeDate
-
     // clip bottom of the event component whose dates past midnight
-    // that last for more than two days
     if (dateDifference >= 1) {
       height = height - (bottom + (dateDifference - 1) * 100)
     }
@@ -43,10 +38,7 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
 
     // put the clipped event component at the top of
     // the end day
-    if (
-      selectedDate.getDate() === endTimeDate &&
-      startTimeDate < selectedDate.getDate()
-    ) {
+    if (date.getDate() === endTimeDate && startTimeDate < date.getDate()) {
       top = 0
       height = bottom
     }
@@ -56,9 +48,11 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
 
   const { eventStartTime, eventEndTime, top, height } = eventComponentInfo()
 
-  // const ref = useRef<HTMLDivElement>(null)
-
-  if (selectedEvent && selectedDate !== undefined && selectedEvent.type === type) {
+  if (
+    selectedEvent.id.includes("new-") &&
+    selectedEvent.type === type &&
+    startOfDay(date).getTime() === startOfDay(eventStartTime).getTime()
+  ) {
     return (
       <div
         key="new_event"
@@ -69,9 +63,7 @@ export const NewEvent: React.FC<NewEventProps> = ({ date: selectedDate, type }) 
         }}
       >
         <div
-          // ref={ref}
           className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 shadow-2xl transition-shadow duration-200 ease-in-out`}
-          // onClick={handleEventClick()}
         >
           <h3 className="text-sm font-bold">New {toCapitalize(type)} Event</h3>
           <p className="text-xs">{localeDate(eventStartTime)}</p>

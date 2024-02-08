@@ -1,6 +1,6 @@
 "use client"
 import { Events } from "src/components/calendar/Events"
-import { localeDate } from "src/utils/utils"
+import { localeDate, toCapitalize } from "src/utils/utils"
 import { events } from "src/utils/sampleEvents"
 import { EventType, DailyEventColumProps } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
@@ -13,10 +13,7 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const types: EventType[] = ["scheduled", "recorded"]
-  const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
-
-  const [visible, setVisible] = useState(false)
 
   const ref = useRef(null)
 
@@ -39,18 +36,14 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
     return startTime
   }
 
-  const handleNewEvent = (type: EventType) => () => {
+  const handleNewEventClick = (type: EventType) => () => {
     setSelectedEvent({
-      title: "New Event",
-      id: "new_event",
+      id: `new-${type}-${new Date().getTime()}`,
+      title: `New ${toCapitalize(type)} Event`,
       type: type,
       startTime: getStartTime(elY, elH).toISOString(),
       endTime: addHours(getStartTime(elY, elH), 2).toISOString(),
     })
-    setVisible(true)
-    if (!selectedEvent) return
-    console.log(startOfDay(selectedDate).toISOString())
-    console.log(startOfDay(selectedEvent.startTime).toISOString())
   }
 
   return (
@@ -60,12 +53,9 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
           ref={ref}
           key={index}
           className="relative flex w-[100px] flex-col justify-evenly overflow-hidden border-l border-slate-400"
-          onClick={handleNewEvent(type)}
+          onClick={handleNewEventClick(type)}
         >
-          {/* {selectedEvent && selectedDate !== undefined && selectedEvent.type === type && ( */}
-          {/*   <NewEvent date={selectedDate} type={type} /> */}
-          {/* )} */}
-          <NewEvent date={selectedDate} type={type} visible={visible} />
+          <NewEvent date={selectedDate} type={type} />
           <Events date={selectedDate} events={events} type={type} />
         </div>
       ))}

@@ -21,7 +21,7 @@ type AnimateEditorProps = {
 
 const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
-  const id = selectedEvent?.id || undefined
+  const id = selectedEvent?.id
   const width = "500px"
   const styleProps = "fixed right-0 top-10 h-screen bg-gray-200 shadow-xl"
 
@@ -62,13 +62,13 @@ const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) =
 }
 
 type EditorCardProps = {
-  // previousID: EventComponentProps["id"] | undefined
   setPreviousID: (value: React.SetStateAction<string | undefined>) => void
 }
 
 const EditorCard: React.FC<EditorCardProps> = ({ setPreviousID }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
+
   const handleClose = () => {
     resetSelectedEvent()
     setPreviousID(undefined)
@@ -123,14 +123,12 @@ const EventDateInput: React.FC<EventDateInputProps> = ({ className, data }) => (
 export const EventSideEditor: React.FC = () => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
 
-  const id = selectedEvent?.id || undefined
+  const id = selectedEvent?.id
 
   const [previousID, setPreviousID] = useState<string | undefined>()
 
   useEffect(() => {
-    if (id !== undefined) {
-      setPreviousID(id)
-    }
+    setPreviousID(id)
   }, [id])
 
   return (

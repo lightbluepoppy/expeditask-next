@@ -6,14 +6,14 @@ import { localeTime, localeDate } from "src/utils/utils"
 import { CalendarEvent } from "src/types"
 import { useSelectedEventStore } from "src/stores/stores"
 
-export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type }) => {
+export const Events: React.FC<EventProps> = ({ date, events, type }) => {
   const eventKey = type === "scheduled" ? "scheduled" : "recorded"
   const eventProperty = (timeType: TimeType) =>
     (timeType === "start"
       ? `${eventKey}StartTime`
       : `${eventKey}EndTime`) as keyof CalendarEvent
 
-  const targetDate = selectedDate.getDate()
+  const targetDate = date.getDate()
 
   const filteredEvents = events.filter((event) => {
     const eventStartDate = new Date(event[eventProperty("start")]).getDate()
@@ -68,10 +68,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
 
     // put the clipped event component at the top of
     // the end day
-    if (
-      selectedDate.getDate() === endTimeDate &&
-      startTimeDate < selectedDate.getDate()
-    ) {
+    if (date.getDate() === endTimeDate && startTimeDate < date.getDate()) {
       top = 0
       height = bottom
     }
@@ -88,7 +85,7 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
       [event],
     )
 
-    const id = selectedEvent?.id || undefined
+    const id = selectedEvent?.id
 
     const ref = useRef<HTMLDivElement>(null)
 
@@ -103,7 +100,6 @@ export const Events: React.FC<EventProps> = ({ date: selectedDate, events, type 
         startTime: eventStartTime.toISOString(),
         endTime: eventEndTime.toISOString(),
       })
-      console.log(eventComponentID)
     }
 
     return (

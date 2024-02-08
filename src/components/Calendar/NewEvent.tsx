@@ -63,13 +63,9 @@ export const NewEvent: React.FC<NewEventProps> = ({ date, type }) => {
         }}
       >
         <div
-          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 shadow-2xl transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 px-1 shadow-2xl transition-shadow duration-200 ease-in-out`}
         >
-          <h3 className="text-sm font-bold">New {toCapitalize(type)} Event</h3>
-          <p className="text-xs">{localeDate(eventStartTime)}</p>
-          <p className="text-xs">{localeTime(eventStartTime)}</p>
-          <p className="text-xs">{localeDate(eventEndTime)}</p>
-          <p className="text-xs">{localeTime(eventEndTime)}</p>
+          <h3 className="text-sm font-bold text-gray-500">{selectedEvent.title}</h3>
         </div>
       </div>
     )

@@ -4,10 +4,10 @@ import { localeDate, toCapitalize } from "src/utils/utils"
 import { events } from "src/utils/sampleEvents"
 import { EventType, DailyEventColumProps } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
-import { useMouseHovered, useScratch } from "react-use"
-import { useEffect, useRef, useState } from "react"
-import { addHours, addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
-import { NewEvent } from "./NewEvent"
+import { useMouse } from "react-use"
+import { useRef } from "react"
+import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
+import { NewEvent } from "src/components/calendar/NewEvent"
 
 export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =
@@ -17,15 +17,14 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
 
   const ref = useRef(null)
 
-  const { elY, elH } = useMouseHovered(ref, {
-    bound: true,
-  })
+  const { elY, elH } = useMouse(ref)
 
   const getStartTime = (elY: number, elH: number) => {
     const coordinateInMinutes = Math.round((elY / elH) * 1440)
     let startTime = startOfDay(selectedDate)
 
     // Round up to the nearest half hour
+    // set -15 for an adjustment
     const roundedMinutes = Math.round((coordinateInMinutes - 15) / 30) * 30
 
     startTime = setMinutes(
@@ -42,7 +41,7 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
       title: `New ${toCapitalize(type)} Event`,
       type: type,
       startTime: getStartTime(elY, elH).toISOString(),
-      endTime: addHours(getStartTime(elY, elH), 2).toISOString(),
+      endTime: addMinutes(getStartTime(elY, elH), 30).toISOString(),
     })
   }
 

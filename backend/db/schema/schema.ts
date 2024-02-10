@@ -6,6 +6,7 @@ import {
   primaryKey,
   timestamp,
   varchar,
+  text,
 } from "drizzle-orm/mysql-core"
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm"
 import type { AdapterAccount } from "@auth/core/adapters"
@@ -25,7 +26,7 @@ export const accounts = mysqlTable(
     userId: varchar("userId", { length: 255 }).notNull(),
     type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("provider-account-id", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
     expires_at: int("expires_at"),
@@ -84,16 +85,19 @@ export const eventInstances = mysqlTable("event_instances", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   isArchived: boolean("is_archived"),
-  isDoable: boolean("is_doable"),
+  // isDoable: boolean("is_doable"),
+  eventType: text("event_type", { enum: ["scheduled", "recorded"] }),
+  startTime: timestamp("start_time"),
+  endTime: timestamp("end_time"),
 })
 
-export const eventInstanceTimeEntry = mysqlTable("event_instance_time_entry", {
-  eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
-  scheduledStartTime: timestamp("scheduled_start_time"),
-  scheduledEndTime: timestamp("scheduled_end_time"),
-  recordedStartTime: timestamp("recorded_start_time"),
-  recordedEndTime: timestamp("recorded_end_time"),
-})
+// export const eventInstanceTimeEntry = mysqlTable("event_instance_time_entry", {
+//   eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
+//   scheduledStartTime: timestamp("scheduled_start_time"),
+//   scheduledEndTime: timestamp("scheduled_end_time"),
+//   recordedStartTime: timestamp("recorded_start_time"),
+//   recordedEndTime: timestamp("recorded_end_time"),
+// })
 
 export const eventInstanceStatistics = mysqlTable("event_statistics", {
   eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
@@ -182,7 +186,7 @@ export const eventInstanceRelations = relations(eventInstances, ({ one }) => ({
     fields: [eventInstances.eventID],
     references: [events.eventID],
   }),
-  eventInstanceTimeEntry: one(eventInstanceTimeEntry),
+  // eventInstanceTimeEntry: one(eventInstanceTimeEntry),
   eventInstanceStatistics: one(eventInstanceStatistics),
   eventInstanceDependency: one(eventInstanceDependency),
   eventInstanceTree: one(eventInstanceTree),
@@ -236,8 +240,8 @@ export type SelectEvent = InferSelectModel<typeof events>
 export type InsertEventInstance = InferInsertModel<typeof eventInstances>
 export type SelectEventInstance = InferSelectModel<typeof eventInstances>
 
-export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
-export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
+// export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
+// export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
 
 export type InsertEventInstanceStatistics = InferInsertModel<
   typeof eventInstanceStatistics

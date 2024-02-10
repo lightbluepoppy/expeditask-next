@@ -39,6 +39,8 @@ export type CalendarEvent = {
   recordedEndTime: string // ISO string format
 }
 
+// export type CalendarEvent = InsertEventInstance
+
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
 export type CalendarView = "day" | "week"

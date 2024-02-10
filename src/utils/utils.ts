@@ -14,8 +14,8 @@ export function localeDate(date: Date | string | undefined): string {
       day: "2-digit",
     }) || "undefined"
   )
-  // .split("/")
-  // .join("-")
+    .split("/")
+    .join("-")
 }
 
 export function localeTime(date: Date | string | undefined): string {

@@ -17,8 +17,8 @@ export type SelectEvent = InferSelectModel<typeof events>
 export type InsertEventInstance = InferInsertModel<typeof eventInstances>
 export type SelectEventInstance = InferSelectModel<typeof eventInstances>
 
-export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
-export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
+// export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
+// export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
 
 export type InsertEventInstanceStatistics = InferInsertModel<
   typeof eventInstanceStatistics

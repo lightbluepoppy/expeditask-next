@@ -1,21 +1,19 @@
 import { db } from "backend/db/server"
-import { Column, InferInsertModel, InferSelectModel, eq } from "drizzle-orm"
+import { InferInsertModel, eq } from "drizzle-orm"
 import { createId } from "@paralleldrive/cuid2"
-import { DataType, TableType } from "src/types"
-import {
-  MySqlColumn,
-  MySqlTable,
-  MySqlTableWithColumns,
-  TableConfig,
-} from "drizzle-orm/mysql-core"
+import { MySqlTable, TableConfig } from "drizzle-orm/mysql-core"
 
 class InternalServerError extends Error {
   name = "InternalServerError"
 }
 
+/**
+ * @param T Table name
+ * @param IDkey ID name
+ */
 export class BaseRepository<
-  T extends MySqlTable<TableConfig>,
-  IDKey extends MySqlColumn,
+  T extends MySqlTable<TableConfig> & { [key: string]: any },
+  IDKey extends string,
 > {
   protected table: T
   protected idKey: IDKey
@@ -25,7 +23,7 @@ export class BaseRepository<
     this.idKey = idKey
   }
 
-  async select(id: IDKey) {
+  async get(id: string) {
     try {
       const res = await db
         .select()
@@ -41,7 +39,7 @@ export class BaseRepository<
     }
   }
 
-  async selectAll() {
+  async getAll() {
     try {
       const res = await db.select().from(this.table)
       if (!res) throw new InternalServerError()
@@ -54,13 +52,14 @@ export class BaseRepository<
     }
   }
 
-  async insert(data: InferInsertModel<T>) {
+  async create(data: InferInsertModel<T>) {
     const id = createId()
-    const dataWithId = { ...data, id } as InferInsertModel<T> & { id: IDKey }
+    const dataWithId = { ...data, [this.idKey]: id }
+
     try {
       const res = await db.insert(this.table).values(dataWithId)
       if (!res) throw new InternalServerError()
-      return this.select(dataWithId.id)
+      return this.get(dataWithId[this.idKey])
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)

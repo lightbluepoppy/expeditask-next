@@ -90,4 +90,19 @@ export type SelectedEventStore = {
 }
 
 export type QueryProps = typeof events | typeof eventInstances
+export async function getAllEventEvents() {
+  try {
+    const res = await db.select().from(events)
+    if (!res) throw new InternalServerError()
+    return res
+  } catch (error) {
+    if (error instanceof InternalServerError) {
+      console.error(error.message)
+      return
+    }
+  }
+}
 export type QueryAllProps = typeof events | typeof eventInstances
+export type TableType = typeof events | typeof eventInstances
+export type IdType = typeof events.eventId | typeof eventInstances.eventInstanceId
+export type DataType = InsertEvent | InsertEventInstance

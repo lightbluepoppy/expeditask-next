@@ -4,134 +4,46 @@ import type {
   SelectEvent,
   SelectEventInstance,
 } from "src/types"
-import { db } from "backend/db/server"
 import { events, eventInstances } from "backend/db/schema/schema"
-import { eq } from "drizzle-orm"
-import type { QueryProps, QueryAllProps } from "src/types"
-import { createId } from "@paralleldrive/cuid2"
+import { BaseRepository } from "src/app/api/crud"
+import { db } from "backend/db/server"
+import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
-class InternalServerError extends Error {
-  name = "InternalServerError"
-}
+export class EventHandler {
+  private eventRepository = new BaseRepository<typeof events, (typeof events)["eventId"]>(
+    events,
+    events.eventId,
+  )
 
-export async function getEvent(eventId: SelectEvent["eventId"]) {
-  try {
-    const res = await db.select().from(events).where(eq(events.eventId, eventId))
-    if (!res) throw new InternalServerError()
-    return res
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
+  async getEvent(eventId: InferSelectModel<typeof events>["eventId"]) {
+    return this.eventRepository.select(eventId)
+  }
+
+  async getAllEvents() {
+    const a = events.eventId
+    return this.eventRepository.selectAll()
+  }
+
+  async createEvent(event: InsertEvent) {
+    return this.eventRepository.insert(event)
   }
 }
 
-export async function getAllEvents() {
-  try {
-    const res = await db.select().from(events)
-    if (!res) throw new InternalServerError()
-    return res
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
+export class EventInstanceHandler {
+  private eventInstanceRepository = new BaseRepository<
+    typeof eventInstances,
+    (typeof eventInstances)["eventInstanceId"]
+  >(eventInstances, eventInstances.eventInstanceId)
+
+  async getEventInstance(eventInstanceId: SelectEventInstance["eventInstanceId"]) {
+    return this.eventInstanceRepository.select(eventInstanceId)
   }
-}
 
-// export async function get(
-//   props: QueryProps,
-//   id: SelectEvent["eventId"] | SelectEventInstance["eventInstanceId"],
-// ) {
-//   const propsId = `${props._.name.slice(0, -1)}Id` as keyof typeof props
-//   try {
-//     const res = await db
-//       .select()
-//       .from(props)
-//       .where(eq(props[propsId] as any, id))
-
-//     if (!res) throw new InternalServerError()
-//     return res
-//   } catch (error) {
-//     if (error instanceof InternalServerError) {
-//       console.error(error.message)
-//       return
-//     }
-//   }
-// }
-
-// export async function getAll(props: QueryAllProps) {
-//   try {
-//     const res = await db.select().from(props)
-//     if (!res) throw new InternalServerError()
-//     return res
-//   } catch (error) {
-//     if (error instanceof InternalServerError) {
-//       console.error(error.message)
-//       return
-//     }
-//   }
-// }
-
-export async function getEventInstance(
-  eventInstanceId: SelectEventInstance["eventInstanceId"],
-) {
-  try {
-    const res = await db
-      .select()
-      .from(eventInstances)
-      .where(eq(eventInstances.eventInstanceId, eventInstanceId))
-
-    if (!res) throw new InternalServerError()
-    return res
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
+  async getAllEventInstances() {
+    return this.eventInstanceRepository.selectAll()
   }
-}
 
-export async function getAllEventInstances() {
-  try {
-    const res = await db.select().from(eventInstances)
-    if (!res) throw new InternalServerError()
-    return res
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
-  }
-}
-
-export async function createEvent(event: InsertEvent) {
-  event.eventId = createId()
-
-  try {
-    const res = await db.insert(events).values(event)
-    if (!res) throw new InternalServerError()
-    return getEvent(event.eventId)
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
-  }
-}
-
-export async function createEventInstance(eventInstance: InsertEventInstance) {
-  eventInstance.eventInstanceId = createId()
-
-  try {
-    const res = await db.insert(eventInstances).values(eventInstance)
-    if (!res) throw new InternalServerError()
-    return getEventInstance(eventInstance.eventInstanceId)
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
+  async createEventInstance(eventInstance: InsertEventInstance) {
+    return this.eventInstanceRepository.insert(eventInstance)
   }
 }

@@ -18,6 +18,6 @@ export const userEventQuery = async () => {
   if (!session?.user) {
     return
   }
-  const res = await db.select().from(events).where(eq(events.userID, session.user.userID))
+  const res = await db.select().from(events).where(eq(events.userId, session.user.userId))
   return res
 }

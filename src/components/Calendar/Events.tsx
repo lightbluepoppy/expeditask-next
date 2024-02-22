@@ -89,12 +89,12 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
 
     const ref = useRef<HTMLDivElement>(null)
 
-    const eventComponentID = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
+    const eventComponentId = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
 
     const handleEventClick = (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       setSelectedEvent({
-        id: eventComponentID,
+        id: eventComponentId,
         title: event.title,
         type: type,
         startTime: eventStartTime.toISOString(),
@@ -104,7 +104,7 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
 
     return (
       <div
-        key={eventComponentID}
+        key={eventComponentId}
         className="absolute w-full pr-1"
         style={{
           top: `${top}%`,
@@ -113,7 +113,7 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
       >
         <div
           ref={ref}
-          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentID === id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
+          className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentId === id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={(e) => handleEventClick(e)}
         >
           <h3 className="text-sm font-bold">{event.title}</h3>

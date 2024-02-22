@@ -65,7 +65,7 @@ export type DailyEventColumProps = {
 }
 
 export type EventEditorProps = {
-  eventID: string
+  eventId: string
   top: number
 }
 
@@ -88,3 +88,6 @@ export type SelectedEventStore = {
   setSelectedEvent: (event: EventComponentProps) => void
   resetSelectedEvent: () => void
 }
+
+export type QueryProps = typeof events | typeof eventInstances
+export type QueryAllProps = typeof events | typeof eventInstances

@@ -21,7 +21,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   const { data: session, status } = useSession()
-  console.log(status)
+  // console.log(status)
 
   return (
     <div className={cn("grid", className)} {...props}>

@@ -8,10 +8,10 @@ import { EditorCard } from "src/components/calendar/EditorCard"
 
 type AnimateEditorProps = {
   children: React.ReactNode
-  previousID: EventComponentProps["id"] | undefined
+  previousId: EventComponentProps["id"] | undefined
 }
 
-const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) => {
+const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousId }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const id = selectedEvent?.id
   const width = "500px"
@@ -20,7 +20,7 @@ const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) =
   return (
     <AnimatePresence>
       {(() => {
-        if (id !== undefined && previousID === undefined) {
+        if (id !== undefined && previousId === undefined) {
           return (
             <motion.div
               key={`event-editor-${id}`}
@@ -35,7 +35,7 @@ const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousID }) =
           )
         }
 
-        if (id && previousID !== undefined) {
+        if (id && previousId !== undefined) {
           return (
             <motion.div
               key={`event-editor-${id}`}
@@ -58,15 +58,15 @@ export const EventSideEditor: React.FC = () => {
 
   const id = selectedEvent?.id
 
-  const [previousID, setPreviousID] = useState<string | undefined>()
+  const [previousId, setPreviousId] = useState<string | undefined>()
 
   useEffect(() => {
-    setPreviousID(id)
+    setPreviousId(id)
   }, [id])
 
   return (
-    <AnimateEditor previousID={previousID}>
-      <EditorCard setPreviousID={setPreviousID} />
+    <AnimateEditor previousId={previousId}>
+      <EditorCard setPreviousId={setPreviousId} />
     </AnimateEditor>
   )
 }

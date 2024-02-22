@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { UseFormReturn } from "react-hook-form"
 import { db } from "backend/db/server"
+import { createEventInstance } from "src/app/api/event/eventHandlers"
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
 
@@ -104,10 +105,10 @@ export const EventDateForm: EventDateInput = ({ time, form, type }) => {
 }
 
 type EditorCard = React.FC<{
-  setPreviousID: (value: React.SetStateAction<string | undefined>) => void
+  setPreviousId: (value: React.SetStateAction<string | undefined>) => void
 }>
 
-export const EditorCard: EditorCard = ({ setPreviousID }) => {
+export const EditorCard: EditorCard = ({ setPreviousId }) => {
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const resetSelectedEvent = useSelectedEventStore((state) => state.resetSelectedEvent)
 
@@ -128,7 +129,7 @@ export const EditorCard: EditorCard = ({ setPreviousID }) => {
 
   const handleClose = () => {
     resetSelectedEvent()
-    setPreviousID(undefined)
+    setPreviousId(undefined)
     console.log(new Date())
   }
 
@@ -136,9 +137,9 @@ export const EditorCard: EditorCard = ({ setPreviousID }) => {
   //   e.preventDefault()
   // }
 
-  // const handleCreateEvent = async () => {
-  //   await db.insert(event).values()
-  // }
+  const handleCreateEvent = async () => {
+    createEventInstance({})
+  }
 
   return (
     <Card>

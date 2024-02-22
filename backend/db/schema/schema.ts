@@ -63,11 +63,11 @@ export const verificationTokens = mysqlTable(
 )
 
 export const events = mysqlTable("events", {
-  eventID: varchar("event_id", { length: 255 })
+  eventId: varchar("event_id", { length: 255 })
     .$defaultFn(() => createId())
     .primaryKey(),
-  // userID: varchar("event_author_id", { length: 255 }).references(() => users.userID),
-  userID: varchar("event_author_id", { length: 255 }),
+  // userId: varchar("event_author_id", { length: 255 }).references(() => users.userId),
+  userId: varchar("event_author_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -78,9 +78,9 @@ export const events = mysqlTable("events", {
 })
 
 export const eventInstances = mysqlTable("event_instances", {
-  eventInstanceID: varchar("event_instance_id", { length: 255 }).primaryKey(),
-  // eventID: varchar("event_id", { length: 255 }).references(() => events.eventID),
-  eventID: varchar("event_id", { length: 255 }),
+  eventInstanceId: varchar("event_instance_id", { length: 255 }).primaryKey(),
+  // eventId: varchar("event_id", { length: 255 }).references(() => events.eventId),
+  eventId: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -92,7 +92,7 @@ export const eventInstances = mysqlTable("event_instances", {
 })
 
 // export const eventInstanceTimeEntry = mysqlTable("event_instance_time_entry", {
-//   eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
+//   eventInstanceId: varchar("event_instance_id", { length: 255 }).unique(),
 //   scheduledStartTime: timestamp("scheduled_start_time"),
 //   scheduledEndTime: timestamp("scheduled_end_time"),
 //   recordedStartTime: timestamp("recorded_start_time"),
@@ -100,7 +100,7 @@ export const eventInstances = mysqlTable("event_instances", {
 // })
 
 export const eventInstanceStatistics = mysqlTable("event_statistics", {
-  eventInstanceID: varchar("event_instance_id", { length: 255 }).unique(),
+  eventInstanceId: varchar("event_instance_id", { length: 255 }).unique(),
   goalTitle: varchar("goal_title", { length: 255 }),
   goalValue: int("goal_value"),
   goalValueUnit: varchar("goal_value_unit", { length: 255 }),
@@ -109,44 +109,44 @@ export const eventInstanceStatistics = mysqlTable("event_statistics", {
 })
 
 export const eventDependency = mysqlTable("event_dependency", {
-  dependantEventID: varchar("dependant_event_id", { length: 255 }).unique(),
-  dependencyEventID: varchar("dependency_event_id", { length: 255 }),
+  dependantEventId: varchar("dependant_event_id", { length: 255 }).unique(),
+  dependencyEventId: varchar("dependency_event_id", { length: 255 }),
 })
 
 export const eventInstanceDependency = mysqlTable("event_instance_dependency", {
-  dependantEventInstanceID: varchar("dependant_event_instance_id", {
+  dependantEventInstanceId: varchar("dependant_event_instance_id", {
     length: 255,
   }).unique(),
-  dependencyEventInstanceID: varchar("dependency_event_instance_id", {
+  dependencyEventInstanceId: varchar("dependency_event_instance_id", {
     length: 255,
   }),
 })
 
 export const eventTree = mysqlTable("event_tree", {
-  parentEventID: varchar("parent_event_id", { length: 255 }).unique(),
-  childEventInstanceID: varchar("child_event_id", { length: 255 }),
+  parentEventId: varchar("parent_event_id", { length: 255 }).unique(),
+  childEventInstanceId: varchar("child_event_id", { length: 255 }),
 })
 
 export const eventInstanceTree = mysqlTable("event_instance_tree", {
-  parentEventInstanceID: varchar("parent_event_instance_id", { length: 255 }).unique(),
-  childEventID: varchar("child_event_instance_id", { length: 255 }),
+  parentEventInstanceId: varchar("parent_event_instance_id", { length: 255 }).unique(),
+  childEventId: varchar("child_event_instance_id", { length: 255 }),
 })
 
 export const tags = mysqlTable("tags", {
-  tagID: varchar("tag_id", { length: 255 })
+  tagId: varchar("tag_id", { length: 255 })
     .$defaultFn(() => createId())
     .primaryKey(),
-  // userID: varchar("user_id", { length: 255 }).references(() => users.userID),
-  userID: varchar("user_id", { length: 255 }),
+  // userId: varchar("user_id", { length: 255 }).references(() => users.userId),
+  userId: varchar("user_id", { length: 255 }),
   title: varchar("title", { length: 255 }),
   color: varchar("color", { length: 255 }),
   imageURL: varchar("image_url", { length: 255 }),
 })
 
 export const tagTree = mysqlTable("tag_tree", {
-  parentTagID: varchar("parent_tag_id", { length: 255 }).primaryKey(),
-  // childTagID: varchar("child_tag_id", { length: 255 }).references(() => tags.tagID),
-  childTagID: varchar("child_tag_id", { length: 255 }),
+  parentTagId: varchar("parent_tag_id", { length: 255 }).primaryKey(),
+  // childTagId: varchar("child_tag_id", { length: 255 }).references(() => tags.tagId),
+  childTagId: varchar("child_tag_id", { length: 255 }),
 })
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -172,7 +172,7 @@ export const sessionRelations = relations(sessions, ({ one }) => ({
 
 export const eventRelations = relations(events, ({ one, many }) => ({
   user: one(users, {
-    fields: [events.userID],
+    fields: [events.userId],
     references: [users.id],
   }),
   eventInstances: many(eventInstances),
@@ -183,8 +183,8 @@ export const eventRelations = relations(events, ({ one, many }) => ({
 
 export const eventInstanceRelations = relations(eventInstances, ({ one }) => ({
   event: one(events, {
-    fields: [eventInstances.eventID],
-    references: [events.eventID],
+    fields: [eventInstances.eventId],
+    references: [events.eventId],
   }),
   // eventInstanceTimeEntry: one(eventInstanceTimeEntry),
   eventInstanceStatistics: one(eventInstanceStatistics),
@@ -196,16 +196,16 @@ export const eventInstanceRelations = relations(eventInstances, ({ one }) => ({
 //     eventInstanceTimeEntry,
 //     ({ one }) => ({
 //         eventInstance: one(eventInstances, {
-//             fields: [eventInstanceTimeEntry.eventInstanceID],
-//             references: [eventInstances.eventInstanceID],
+//             fields: [eventInstanceTimeEntry.eventInstanceId],
+//             references: [eventInstances.eventInstanceId],
 //         }),
 //     }),
 // )
 
 export const eventDependencyRelations = relations(eventDependency, ({ many }) => ({
   // events: many(events, {
-  //     fields: [eventDependency.dependantEventID],
-  //     references: [events.eventID],
+  //     fields: [eventDependency.dependantEventId],
+  //     references: [events.eventId],
   //     relationName: "eventDependency",
   // }),
   events: many(events),

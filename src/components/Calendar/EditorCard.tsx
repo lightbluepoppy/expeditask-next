@@ -24,8 +24,9 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { UseFormReturn } from "react-hook-form"
-import { db } from "backend/db/server"
-import { createEventInstance } from "src/app/api/event/eventHandlers"
+import { db } from "src/db/server"
+import { EventRepository } from "src/utils/repositories/eventRepository"
+import { EventInstanceRepository } from "src/utils/repositories/eventInstanceRepository"
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
 
@@ -114,8 +115,6 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
 
   const { title, startTime, endTime } = selectedEvent ?? {}
 
-  // const [newEvent, setNewEvent] = useState<CalendarEvent>()
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -137,8 +136,9 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
   //   e.preventDefault()
   // }
 
-  const handleCreateEvent = async () => {
-    createEventInstance({})
+  const handleCreateEventInstance = async () => {
+    const formInput = JSON.stringify(form.getValues())
+    const res = new EventInstanceRepository().createEventInstance(formInput)
   }
 
   return (
@@ -174,7 +174,7 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
       </CardHeader>
       <CardFooter className="flex justify-between">
         <Button variant="destructive">Delete</Button>
-        <Button variant="default" onClick={handleCreateEvent}>
+        <Button variant="default" onClick={handleCreateEventInstance}>
           Create
         </Button>
       </CardFooter>

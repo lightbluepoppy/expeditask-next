@@ -1,9 +1,6 @@
-import * as schema from "backend/db/schema/schema"
-import { drizzle } from "drizzle-orm/planetscale-serverless"
-
-import { db } from "backend/db/server"
+import { db } from "src/db/server"
 import { eq } from "drizzle-orm"
-import { events } from "backend/db/schema/schema"
+import { events } from "src/db/schema/schema"
 import { getServerSession } from "next-auth"
 
 // const result = await db.query.users.findMany({

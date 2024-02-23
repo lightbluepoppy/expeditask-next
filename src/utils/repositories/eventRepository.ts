@@ -1,6 +1,6 @@
 import type { InsertEvent } from "src/types"
-import { events } from "backend/db/schema/schema"
-import { BaseRepository } from "src/app/api/repositories/repository"
+import { events } from "src/db/schema/schema"
+import { BaseRepository } from "src/utils/repositories/repository"
 import { InferSelectModel } from "drizzle-orm"
 
 export class EventRepository {

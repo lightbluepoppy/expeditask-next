@@ -1,8 +1,8 @@
 import type { InsertEventInstance, SelectEventInstance } from "src/types"
-import { eventInstances } from "backend/db/schema/schema"
-import { BaseRepository } from "src/app/api/repositories/repository"
+import { eventInstances } from "src/db/schema/schema"
+import { BaseRepository } from "src/utils/repositories/repository"
 
-export class EventInstanceHandler {
+export class EventInstanceRepository {
   private eventInstanceRepository = new BaseRepository<
     typeof eventInstances,
     "eventInstanceId"

@@ -5,7 +5,7 @@ import {
   eventInstanceTimeEntry,
   eventInstanceStatistics,
   tags,
-} from "backend/db/schema/schema"
+} from "src/db/schema/schema"
 import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
 export type InsertUser = InferInsertModel<typeof users>
@@ -30,16 +30,16 @@ export type SelectEventInstanceStatistics = InferSelectModel<
 export type InsertTags = InferInsertModel<typeof tags>
 export type SelectTags = InferSelectModel<typeof tags>
 
-export type CalendarEvent = {
-  id: string
-  title: string
-  scheduledStartTime: string // ISO string format
-  scheduledEndTime: string // ISO string format
-  recordedStartTime: string // ISO string format
-  recordedEndTime: string // ISO string format
-}
+// export type CalendarEvent = {
+//   id: string
+//   title: string
+//   scheduledStartTime: string // ISO string format
+//   scheduledEndTime: string // ISO string format
+//   recordedStartTime: string // ISO string format
+//   recordedEndTime: string // ISO string format
+// }
 
-// export type CalendarEvent = InsertEventInstance
+export type CalendarEvent = InsertEventInstance
 
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"

@@ -1,4 +1,4 @@
-import { db } from "backend/db/server"
+import { db } from "src/db/server"
 import { InferInsertModel, eq } from "drizzle-orm"
 import { createId } from "@paralleldrive/cuid2"
 import { MySqlTable, TableConfig } from "drizzle-orm/mysql-core"
@@ -53,8 +53,7 @@ export class BaseRepository<
   }
 
   async create(data: InferInsertModel<T>) {
-    const id = createId()
-    const dataWithId = { ...data, [this.idKey]: id }
+    const dataWithId = { ...data, [this.idKey]: createId() }
 
     try {
       const res = await db.insert(this.table).values(dataWithId)

@@ -49,7 +49,7 @@ export type EventEditorProps = {
 export type EventComponentProps<T extends SelectScheduledEvent | SelectRecordedEvent> = {
   id: T["id"]
   title: T["title"]
-  type: T extends SelectScheduledEvent ? "scheduled" : "recorded"
+  type: EventType
   startTime: T["startTime"]
   endTime?: T["endTime"]
   color: T["color"]

@@ -1,7 +1,7 @@
 "use client"
 import { Events } from "src/components/calendar/Events"
 import { localeDate, toCapitalize } from "src/utils/utils"
-import { events } from "src/utils/sampleEvents"
+// import { events } from "src/utils/sampleEvents"
 import { EventType, DailyEventColumProps } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
 import { useMouse } from "react-use"
@@ -40,8 +40,9 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
       id: `new-${type}-${new Date().getTime()}`,
       title: `New ${toCapitalize(type)} Event`,
       type: type,
-      startTime: getStartTime(elY, elH).toISOString(),
-      endTime: addMinutes(getStartTime(elY, elH), 30).toISOString(),
+      startTime: getStartTime(elY, elH),
+      endTime: addMinutes(getStartTime(elY, elH), 30),
+      color: "",
     })
   }
 

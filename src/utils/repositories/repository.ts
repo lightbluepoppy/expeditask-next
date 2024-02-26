@@ -11,16 +11,11 @@ class InternalServerError extends Error {
  * @param T Table name
  * @param IDkey ID name
  */
-export class BaseRepository<
-  T extends MySqlTable<TableConfig> & { [key: string]: any },
-  IDKey extends string,
-> {
+export class BaseRepository<T extends MySqlTable<TableConfig> & { [key: string]: any }> {
   protected table: T
-  protected idKey: IDKey
 
-  constructor(table: T, idKey: IDKey) {
+  constructor(table: T) {
     this.table = table
-    this.idKey = idKey
   }
 
   async get(id: string) {
@@ -28,7 +23,7 @@ export class BaseRepository<
       const res = await db
         .select()
         .from(this.table as T)
-        .where(eq(this.table[this.idKey], id))
+        .where(eq(this.table.id, id))
       if (!res) throw new InternalServerError()
       return res
     } catch (error) {
@@ -53,12 +48,12 @@ export class BaseRepository<
   }
 
   async create(data: InferInsertModel<T>) {
-    const dataWithId = { ...data, [this.idKey]: createId() }
+    const dataWithId = { ...data, id: createId() }
 
     try {
       const res = await db.insert(this.table).values(dataWithId)
       if (!res) throw new InternalServerError()
-      return this.get(dataWithId[this.idKey])
+      return this.get(dataWithId.id)
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)

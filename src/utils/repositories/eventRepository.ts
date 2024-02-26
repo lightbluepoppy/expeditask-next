@@ -1,5 +1,5 @@
 import type { InsertEvent } from "src/types"
-import { events } from "src/db/schema/schema"
+import { events } from "backend/db/schema/schema"
 import { BaseRepository } from "src/utils/repositories/repository"
 import { InferSelectModel } from "drizzle-orm"
 

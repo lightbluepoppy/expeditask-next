@@ -8,15 +8,15 @@ import { useSelectedEventStore } from "src/stores/stores"
 
 export const Events: React.FC<EventProps> = ({ date, events, type }) => {
   const eventKey = type === "scheduled" ? "scheduled" : "recorded"
-  const eventProperty = (timeType: TimeType) =>
-    (timeType === "start"
-      ? `${eventKey}StartTime`
-      : `${eventKey}EndTime`) as keyof CalendarEvent
+  // const eventProperty = (timeType: TimeType) =>
+  //   (timeType === "start"
+  //     ? `${eventKey}StartTime`
+  //     : `${eventKey}EndTime`) as keyof CalendarEvent
 
   const targetDate = date.getDate()
 
   const filteredEvents = events.filter((event) => {
-    const eventStartDate = new Date(event[eventProperty("start")]).getDate()
+    const eventStartDate = new Date(event.startTime).getDate()
     const eventEndDate = new Date(event[eventProperty("end")]).getDate()
 
     const isOneDayEventComponent =

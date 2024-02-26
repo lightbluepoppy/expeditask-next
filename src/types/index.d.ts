@@ -28,7 +28,7 @@ export type Props = {
 
 export type EventProps = {
   date: Date
-  event: CalendarEvent[]
+  events: CalendarEvent[]
   type: EventType
 }
 
@@ -49,11 +49,13 @@ export type EventEditorProps = {
 export type EventComponentProps<T extends SelectScheduledEvent | SelectRecordedEvent> = {
   id: T["id"]
   title: T["title"]
-  type: T[]
+  type: T extends SelectScheduledEvent ? "scheduled" : "recorded"
   startTime: T["startTime"]
   endTime?: T["endTime"]
   color: T["color"]
 }
+
+export type EventGenericTypes = SelectScheduledEvent | SelectRecordedEvent
 
 export type SelectedDateStore = {
   selectedDate: Date

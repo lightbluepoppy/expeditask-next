@@ -1,5 +1,10 @@
-import { create } from "zustand"
-import { SelectedDateStore, SelectedEventStore } from "src/types"
+import { StoreApi, UseBoundStore, create } from "zustand"
+import {
+  SelectRecordedEvent,
+  SelectScheduledEvent,
+  SelectedDateStore,
+  SelectedEventStore,
+} from "src/types"
 
 export const useSelectedDateStore = create<SelectedDateStore>()((set) => ({
   selectedDate: new Date("2024-01-10"),
@@ -10,12 +15,10 @@ export const useSelectedDateStore = create<SelectedDateStore>()((set) => ({
     })),
 }))
 
-export const useSelectedEventStore = create<SelectedEventStore>()((set) => ({
+export const useSelectedEventStore = create<
+  SelectedEventStore<SelectScheduledEvent | SelectRecordedEvent>
+>()((set) => ({
   selectedEvent: undefined,
   setSelectedEvent: (event) => set({ selectedEvent: event }),
   resetSelectedEvent: () => set({ selectedEvent: undefined }),
-}))
-
-export const useCreateEventStore = create()((set) => ({
-  // selectedEvent: useSelectedEventStore()
 }))

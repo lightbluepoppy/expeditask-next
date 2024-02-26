@@ -137,8 +137,7 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
   // }
 
   const handleCreateEventInstance = async () => {
-    const formInput = JSON.stringify(form.getValues())
-    const res = new EventInstanceRepository().createEventInstance(formInput)
+    const res = new EventInstanceRepository().createEventInstance(form.getValues())
   }
 
   return (

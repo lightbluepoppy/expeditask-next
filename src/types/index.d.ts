@@ -1,45 +1,22 @@
-import {
-  users,
-  events,
-  eventInstances,
-  eventInstanceTimeEntry,
-  eventInstanceStatistics,
-  tags,
-} from "src/db/schema/schema"
+import { users, event, scheduledEvent, recordedEvent, tag } from "src/db/schema/schema"
 import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
 export type InsertUser = InferInsertModel<typeof users>
 export type SelectUser = InferSelectModel<typeof users>
 
-export type InsertEvent = InferInsertModel<typeof events>
-export type SelectEvent = InferSelectModel<typeof events>
+export type InsertEvent = InferInsertModel<typeof event>
+export type SelectEvent = InferSelectModel<typeof event>
 
-export type InsertEventInstance = InferInsertModel<typeof eventInstances>
-export type SelectEventInstance = InferSelectModel<typeof eventInstances>
+export type InsertScheduledEvent = InferInsertModel<typeof scheduledEvent>
+export type SelectScheduledEvent = InferSelectModel<typeof scheduledEvent>
 
-// export type InsertEventInstanceTimeEntry = InferInsertModel<typeof eventInstanceTimeEntry>
-// export type SelectEventInstanceTimeEntry = InferSelectModel<typeof eventInstanceTimeEntry>
+export type InsertRecordedEvent = InferInsertModel<typeof recordedEvent>
+export type SelectRecordedEvent = InferSelectModel<typeof recordedEvent>
 
-export type InsertEventInstanceStatistics = InferInsertModel<
-  typeof eventInstanceStatistics
->
-export type SelectEventInstanceStatistics = InferSelectModel<
-  typeof eventInstanceStatistics
->
+export type InsertTags = InferInsertModel<typeof tag>
+export type SelectTags = InferSelectModel<typeof tag>
 
-export type InsertTags = InferInsertModel<typeof tags>
-export type SelectTags = InferSelectModel<typeof tags>
-
-// export type CalendarEvent = {
-//   id: string
-//   title: string
-//   scheduledStartTime: string // ISO string format
-//   scheduledEndTime: string // ISO string format
-//   recordedStartTime: string // ISO string format
-//   recordedEndTime: string // ISO string format
-// }
-
-export type CalendarEvent = InsertEventInstance
+export type CalendarEvent = InsertEvent
 
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
@@ -51,7 +28,7 @@ export type Props = {
 
 export type EventProps = {
   date: Date
-  events: CalendarEvent[]
+  event: CalendarEvent[]
   type: EventType
 }
 
@@ -69,12 +46,13 @@ export type EventEditorProps = {
   top: number
 }
 
-export type EventComponentProps = {
-  id: CalendarEvent["id"]
-  title: CalendarEvent["title"]
-  type: EventType
-  startTime: CalendarEvent["scheduledStartTime"] | CalendarEvent["recordedStartTime"]
-  endTime: CalendarEvent["scheduledEndTime"] | CalendarEvent["recordedEndTime"]
+export type EventComponentProps<T extends SelectScheduledEvent | SelectRecordedEvent> = {
+  id: T["id"]
+  title: T["title"]
+  type: T[]
+  startTime: T["startTime"]
+  endTime?: T["endTime"]
+  color: T["color"]
 }
 
 export type SelectedDateStore = {
@@ -83,26 +61,8 @@ export type SelectedDateStore = {
   changeSelectedDateBy: (day: number) => void
 }
 
-export type SelectedEventStore = {
-  selectedEvent: EventComponentProps | undefined
-  setSelectedEvent: (event: EventComponentProps) => void
+export type SelectedEventStore<T extends SelectScheduledEvent | SelectRecordedEvent> = {
+  selectedEvent: EventComponentProps<T> | undefined
+  setSelectedEvent: (event: EventComponentProps<T>) => void
   resetSelectedEvent: () => void
 }
-
-export type QueryProps = typeof events | typeof eventInstances
-export async function getAllEventEvents() {
-  try {
-    const res = await db.select().from(events)
-    if (!res) throw new InternalServerError()
-    return res
-  } catch (error) {
-    if (error instanceof InternalServerError) {
-      console.error(error.message)
-      return
-    }
-  }
-}
-export type QueryAllProps = typeof events | typeof eventInstances
-export type TableType = typeof events | typeof eventInstances
-export type IdType = typeof events.eventId | typeof eventInstances.eventInstanceId
-export type DataType = InsertEvent | InsertEventInstance

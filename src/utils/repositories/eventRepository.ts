@@ -1,19 +1,19 @@
-import type { InsertEvent, SelectEvent } from "src/types"
+import type { InsertEvent, QueryInput, SelectEvent } from "src/types"
 import { event } from "src/db/schema/schema"
 import { BaseRepository } from "src/utils/repositories/baseRepository"
 
 export class EventRepository {
   private eventRepository = new BaseRepository<typeof event>(event)
 
-  async getEvent(id: SelectEvent["id"]) {
-    return this.eventRepository.get(id)
+  async getEvent(data: QueryInput) {
+    return this.eventRepository.get(data)
   }
 
-  async getAllEvents() {
-    return this.eventRepository.getAll()
+  async getAllEvents(data: QueryInput["userId"]) {
+    return this.eventRepository.getAll(data)
   }
 
-  async createEvent(event: InsertEvent) {
-    return this.eventRepository.create(event)
+  async createEvent(data: InsertEvent) {
+    return this.eventRepository.create(data)
   }
 }

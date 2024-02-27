@@ -8,12 +8,14 @@ import { useMouse } from "react-use"
 import { useRef } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
+import { scheduledEventRepository } from "src/utils/repositories/eventRepository"
 
 export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const types: EventType[] = ["scheduled", "recorded"]
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
+  const events = new scheduledEventRepository().
 
   const ref = useRef(null)
 

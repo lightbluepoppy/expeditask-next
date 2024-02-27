@@ -75,7 +75,7 @@ export type Tables =
   | typeof recordedEvent
   | typeof tag
 
-export type TableDataHandlerInfo = {
+export type QueryInput = {
   id: Tables["id"]
   userId: Tables["userId"]
 }

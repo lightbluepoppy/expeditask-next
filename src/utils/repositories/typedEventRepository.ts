@@ -3,30 +3,41 @@ import type {
   SelectScheduledEvent,
   InsertRecordedEvent,
   SelectRecordedEvent,
+  QueryInput,
 } from "src/types"
 import { BaseRepository } from "src/utils/repositories/baseRepository"
 import { scheduledEvent, recordedEvent } from "src/db/schema/schema"
-import { InferInsertModel } from "drizzle-orm"
+import { InferInsertModel, and, eq } from "drizzle-orm"
+import { db } from "src/db/server"
+import { InternalServerError } from "src/utils/errors"
 
 export class TypedEventRepository<
   T extends typeof scheduledEvent | typeof recordedEvent,
 > {
-  private eventRepository: BaseRepository<T>
+  private typedEventRepository: BaseRepository<T>
 
   constructor(table: T) {
-    this.eventRepository = new BaseRepository<T>(table)
+    this.typedEventRepository = new BaseRepository<T>(table)
   }
 
-  async get(id: string) {
-    return this.eventRepository.get(id)
+  async get(data: QueryInput) {
+    return this.typedEventRepository.get(data)
   }
 
-  async getAll() {
-    return this.eventRepository.getAll()
+  async getAll(userId: QueryInput["userId"]) {
+    return this.typedEventRepository.getAll(userId)
   }
 
-  async create(event: InferInsertModel<T>) {
-    return this.eventRepository.create(event)
+  async create(eventData: InferInsertModel<T>) {
+    return this.typedEventRepository.create(eventData)
+  }
+
+  async delete(data: QueryInput) {
+    return this.typedEventRepository.delete(data)
+  }
+
+  async archive(data: QueryInput) {
+    return this.typedEventRepository.delete(data)
   }
 }
 
@@ -35,16 +46,24 @@ export class ScheduledEventRepository {
     scheduledEvent,
   )
 
-  async getScheduledEvents(id: SelectScheduledEvent["id"]) {
-    return this.scheduledEventRepository.get(id)
+  async getScheduledEvents(data: QueryInput) {
+    return this.scheduledEventRepository.get(data)
   }
 
-  async getAllScheduledEvent() {
-    return this.scheduledEventRepository.getAll()
+  async getAllScheduledEvent(userId: QueryInput["userId"]) {
+    return this.scheduledEventRepository.getAll(userId)
   }
 
-  async createScheduledEvent(scheduledEvent: InsertScheduledEvent) {
-    return this.scheduledEventRepository.create(scheduledEvent)
+  async createScheduledEvent(eventData: InsertScheduledEvent) {
+    return this.scheduledEventRepository.create(eventData)
+  }
+
+  async archiveScheduledEvent(data: QueryInput) {
+    return this.scheduledEventRepository.archive(data)
+  }
+
+  async deleteScheduledEvent(data: QueryInput) {
+    return this.scheduledEventRepository.delete(data)
   }
 }
 
@@ -53,15 +72,23 @@ export class RecordedEventRepository {
     recordedEvent,
   )
 
-  async getRecordedEvent(id: SelectRecordedEvent["id"]) {
-    return this.recordedEventRepository.get(id)
+  async getRecordedEvent(data: QueryInput) {
+    return this.recordedEventRepository.get(data)
   }
 
-  async getAllRecordedEvents() {
-    return this.recordedEventRepository.getAll()
+  async getAllRecordedEvents(userId: QueryInput["userId"]) {
+    return this.recordedEventRepository.getAll(userId)
   }
 
-  async createRecordedEvents(recordedEvent: InsertRecordedEvent) {
-    return this.recordedEventRepository.create(recordedEvent)
+  async createRecordedEvents(eventData: InsertRecordedEvent) {
+    return this.recordedEventRepository.create(eventData)
+  }
+
+  async archiveRecordedEvent(data: QueryInput) {
+    return this.recordedEventRepository.archive(data)
+  }
+
+  async deleteRecordedEvent(data: QueryInput) {
+    return this.recordedEventRepository.delete(data)
   }
 }

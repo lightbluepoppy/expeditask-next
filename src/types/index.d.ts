@@ -78,4 +78,5 @@ export type Tables =
 export type QueryInput = {
   id: Tables["id"]
   userId: Tables["userId"]
+  date?: (typeof scheduledEvent)["startTime"] | (typeof recordedEvent)["startTime"]
 }

@@ -7,17 +7,20 @@ import type {
 } from "src/types"
 import { BaseRepository } from "src/utils/repositories/baseRepository"
 import { scheduledEvent, recordedEvent } from "src/db/schema/schema"
-import { InferInsertModel, and, eq } from "drizzle-orm"
+import { InferInsertModel, and, eq, between } from "drizzle-orm"
 import { db } from "src/db/server"
 import { InternalServerError } from "src/utils/errors"
+import { addDays, subDays } from "date-fns"
 
 export class TypedEventRepository<
   T extends typeof scheduledEvent | typeof recordedEvent,
 > {
   private typedEventRepository: BaseRepository<T>
+  private table: T
 
   constructor(table: T) {
     this.typedEventRepository = new BaseRepository<T>(table)
+    this.table = table
   }
 
   async get(data: QueryInput) {
@@ -38,6 +41,31 @@ export class TypedEventRepository<
 
   async archive(data: QueryInput) {
     return this.typedEventRepository.delete(data)
+  }
+
+  async getEventsByDate(data: QueryInput) {
+    try {
+      const res = await db
+        .select()
+        .from(this.table as T)
+        .where(
+          and(
+            eq(this.table.userId, data.userId),
+            between(
+              this.table.startTime,
+              subDays(this.table.startTime.toString(), 14),
+              addDays(this.table.startTime.toString(), 14),
+            ),
+          ),
+        )
+      if (!res) throw new InternalServerError()
+      return res
+    } catch (error) {
+      if (error instanceof InternalServerError) {
+        console.error(error.message)
+        return
+      }
+    }
   }
 }
 

@@ -1,16 +1,12 @@
-import type { InsertEvent } from "src/types"
-import { events } from "backend/db/schema/schema"
-import { BaseRepository } from "src/utils/repositories/repository"
-import { InferSelectModel } from "drizzle-orm"
+import type { InsertEvent, SelectEvent } from "src/types"
+import { event } from "src/db/schema/schema"
+import { BaseRepository } from "src/utils/repositories/baseRepository"
 
 export class EventRepository {
-  private eventRepository = new BaseRepository<typeof events, "eventId">(
-    events,
-    "eventId",
-  )
+  private eventRepository = new BaseRepository<typeof event>(event)
 
-  async getEvent(eventId: InferSelectModel<typeof events>["eventId"]) {
-    return this.eventRepository.get(eventId)
+  async getEvent(id: SelectEvent["id"]) {
+    return this.eventRepository.get(id)
   }
 
   async getAllEvents() {

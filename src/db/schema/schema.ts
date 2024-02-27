@@ -87,6 +87,7 @@ export const event = mysqlTable("event", {
 
 export const scheduledEvent = mysqlTable("scheduled_event", {
   id: varchar("id", { length: 255 }).primaryKey().unique(),
+  userId: varchar("user_id", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   eventId: varchar("event_id", { length: 255 }),
@@ -99,6 +100,7 @@ export const scheduledEvent = mysqlTable("scheduled_event", {
 
 export const recordedEvent = mysqlTable("recorded_event", {
   id: varchar("id", { length: 255 }).primaryKey().unique(),
+  userId: varchar("user_id", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   eventId: varchar("event_id", { length: 255 }),
@@ -128,6 +130,8 @@ export const tag = mysqlTable("tag", {
 export const userRelations = relations(users, ({ one, many }) => ({
   account: one(accounts),
   session: one(sessions),
+  scheduledEvent: many(scheduledEvent),
+  recordedEvent: many(recordedEvent),
   events: many(event),
   tag: many(tag),
 }))

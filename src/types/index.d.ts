@@ -68,3 +68,14 @@ export type SelectedEventStore<T extends SelectScheduledEvent | SelectRecordedEv
   setSelectedEvent: (event: EventComponentProps<T>) => void
   resetSelectedEvent: () => void
 }
+
+export type Tables =
+  | typeof event
+  | typeof scheduledEvent
+  | typeof recordedEvent
+  | typeof tag
+
+export type TableDataHandlerInfo = {
+  id: Tables["id"]
+  userId: Tables["userId"]
+}

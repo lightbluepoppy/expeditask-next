@@ -2,6 +2,7 @@ import { db } from "src/db/server"
 import { InferInsertModel, eq, and } from "drizzle-orm"
 import { QueryInput, Tables } from "src/types"
 import { InternalServerError } from "src/utils/errors"
+import { getServerSession } from "next-auth"
 
 /**
  * @param T Table name
@@ -11,11 +12,15 @@ export class BaseRepository<T extends Tables> {
   constructor(private table: T) {}
 
   async get(data: QueryInput) {
+    const session = await getServerSession()
+    if (!session?.user) return
     try {
       const res = await db
         .select()
         .from(this.table as T)
-        .where(and(eq(this.table.userId, data.userId), eq(this.table.id, data.id)))
+        .where(
+          and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
+        )
       if (!res) throw new InternalServerError()
       return res
     } catch (error) {
@@ -26,9 +31,14 @@ export class BaseRepository<T extends Tables> {
     }
   }
 
-  async getAll(userId: QueryInput["userId"]) {
+  async getAll() {
+    const session = await getServerSession()
+    if (!session?.user) return
     try {
-      const res = await db.select().from(this.table).where(eq(this.table.userId, userId))
+      const res = await db
+        .select()
+        .from(this.table)
+        .where(eq(this.table.userId, session.user.userId))
       if (!res) throw new InternalServerError()
       return res
     } catch (error) {
@@ -53,6 +63,8 @@ export class BaseRepository<T extends Tables> {
   }
 
   async archive(data: QueryInput) {
+    const session = await getServerSession()
+    if (!session?.user) return
     try {
       const updateObject: { [Key in keyof T["_"]["columns"]]?: any } & {
         isArchived?: boolean
@@ -61,7 +73,9 @@ export class BaseRepository<T extends Tables> {
       const res = await db
         .update(this.table)
         .set(updateObject)
-        .where(and(eq(this.table.userId, data.userId), eq(this.table.id, data.id)))
+        .where(
+          and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
+        )
       if (!res) throw new InternalServerError()
       return res
     } catch (error) {
@@ -73,8 +87,14 @@ export class BaseRepository<T extends Tables> {
   }
 
   async delete(data: QueryInput) {
+    const session = await getServerSession()
+    if (!session?.user) return
     try {
-      const res = await db.delete(this.table).where(eq(this.table.userId, data.userId))
+      const res = await db
+        .delete(this.table)
+        .where(
+          and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
+        )
       if (!res) throw new InternalServerError()
       return res
     } catch (error) {

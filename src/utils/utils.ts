@@ -36,3 +36,24 @@ export function addMinutes(date: Date, minutes: number) {
 export function toCapitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
+
+export function getMondayDate(date: Date | string): Date {
+  if (typeof date === "string") date = new Date(date)
+  const dayOfWeek = date.getDay()
+  const mondayDate = new Date(date)
+  mondayDate.setDate(date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1))
+  return mondayDate
+}
+
+export function getWeekDates(date: Date): Date[] {
+  const mondayDate = getMondayDate(date)
+  const weekDates: Date[] = []
+
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(mondayDate)
+    currentDate.setDate(mondayDate.getDate() + i)
+    weekDates.push(currentDate)
+  }
+
+  return weekDates
+}

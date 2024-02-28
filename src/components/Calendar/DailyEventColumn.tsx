@@ -1,21 +1,38 @@
 "use client"
 import { Events } from "src/components/calendar/Events"
 import { localeDate, toCapitalize } from "src/utils/utils"
-// import { events } from "src/utils/sampleEvents"
-import { EventType, DailyEventColumProps } from "src/types"
+import {
+  EventType,
+  DailyEventColumProps,
+  GetAll,
+  RecordedEvent,
+  ScheduledEvent,
+} from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
 import { useMouse } from "react-use"
 import { useRef } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
-import { scheduledEventRepository } from "src/utils/repositories/eventRepository"
+import { TypedEventRepository } from "src/utils/repositories/typedEventRepository"
+import { recordedEvent, scheduledEvent } from "src/db/schema/schema"
 
 export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const types: EventType[] = ["scheduled", "recorded"]
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
-  const events = new scheduledEventRepository().
+
+  const scheduledEvents: GetAll<ScheduledEvent> =
+    new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll()
+
+  const recordedEvents: GetAll<RecordedEvent> = new TypedEventRepository<RecordedEvent>(
+    recordedEvent,
+  ).getAll()
+
+  // const recordedEvents: GetAll<typeof recordedEvent> =
+  //   new RecordedEventRepository().getAllRecordedEvents()
+
+  const events = [scheduledEvents, recordedEvents]
 
   const ref = useRef(null)
 

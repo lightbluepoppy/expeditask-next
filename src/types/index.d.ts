@@ -1,20 +1,26 @@
 import { users, event, scheduledEvent, recordedEvent, tag } from "src/db/schema/schema"
 import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
-export type InsertUser = InferInsertModel<typeof users>
-export type SelectUser = InferSelectModel<typeof users>
+export type Users = typeof users
+export type Event = typeof event
+export type ScheduledEvent = typeof scheduledEvent
+export type RecordedEvent = typeof recordedEvent
+export type Tag = typeof tag
 
-export type InsertEvent = InferInsertModel<typeof event>
-export type SelectEvent = InferSelectModel<typeof event>
+export type InsertUser = InferInsertModel<Users>
+export type SelectUser = InferSelectModel<Users>
 
-export type InsertScheduledEvent = InferInsertModel<typeof scheduledEvent>
-export type SelectScheduledEvent = InferSelectModel<typeof scheduledEvent>
+export type InsertEvent = InferInsertModel<Event>
+export type SelectEvent = InferSelectModel<Event>
 
-export type InsertRecordedEvent = InferInsertModel<typeof recordedEvent>
-export type SelectRecordedEvent = InferSelectModel<typeof recordedEvent>
+export type InsertScheduledEvent = InferInsertModel<ScheduledEvent>
+export type SelectScheduledEvent = InferSelectModel<ScheduledEvent>
 
-export type InsertTags = InferInsertModel<typeof tag>
-export type SelectTags = InferSelectModel<typeof tag>
+export type InsertRecordedEvent = InferInsertModel<RecordedEvent>
+export type SelectRecordedEvent = InferSelectModel<RecordedEvent>
+
+export type InsertTags = InferInsertModel<Tag>
+export type SelectTags = InferSelectModel<Tag>
 
 export type CalendarEvent = InsertEvent
 
@@ -34,6 +40,7 @@ export type EventProps = {
 
 export type NewEventProps = {
   date: Date
+  events: InsertScheduledEvent | InsertRecordedEvent
   type: EventType
 }
 
@@ -77,6 +84,7 @@ export type Tables =
 
 export type QueryInput = {
   id: Tables["id"]
-  userId: Tables["userId"]
-  date?: (typeof scheduledEvent)["startTime"] | (typeof recordedEvent)["startTime"]
+  date?: Date
 }
+
+export type GetAll<T extends Tables> = Promise<InferInsertModel<T>[] | undefined>

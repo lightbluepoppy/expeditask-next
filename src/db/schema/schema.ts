@@ -92,8 +92,8 @@ export const scheduledEvent = mysqlTable("scheduled_event", {
   updatedAt: timestamp("updated_at").defaultNow(),
   eventId: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
-  startTime: timestamp("start_time"),
-  endTime: timestamp("end_time"),
+  startTime: varchar("start_time", { length: 255 }).default(new Date().toISOString()),
+  endTime: varchar("end_time", { length: 255 }).default(new Date().toISOString()),
   isArchived: boolean("is_archived").default(false),
   color: varchar("color", { length: 6 }),
 })
@@ -106,8 +106,8 @@ export const recordedEvent = mysqlTable("recorded_event", {
   eventId: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   status: varchar("status", { length: 255 }),
-  startTime: timestamp("start_time"),
-  endTime: timestamp("end_time"),
+  startTime: varchar("start_time", { length: 255 }).default(new Date().toISOString()),
+  endTime: varchar("end_time", { length: 255 }).default(new Date().toISOString()),
   isArchived: boolean("is_archived").default(false),
   color: varchar("color", { length: 6 }),
 })

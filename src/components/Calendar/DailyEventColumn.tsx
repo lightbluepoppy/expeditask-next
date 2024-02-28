@@ -7,6 +7,9 @@ import {
   GetAll,
   RecordedEvent,
   ScheduledEvent,
+  GetAllEvents,
+  InsertScheduledEvent,
+  InsertRecordedEvent,
 } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
 import { useMouse } from "react-use"
@@ -19,33 +22,50 @@ import { recordedEvent, scheduledEvent } from "src/db/schema/schema"
 export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
-  const types: EventType[] = ["scheduled", "recorded"]
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
-  const scheduledEvents: GetAll<ScheduledEvent> =
-    new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll()
+  const types: EventType[] = ["scheduled", "recorded"]
 
-  const recordedEvents: GetAll<RecordedEvent> = new TypedEventRepository<RecordedEvent>(
-    recordedEvent,
-  ).getAll()
+  // const events: {
+  //   scheduledEvents: Promise<InsertScheduledEvent[] | undefined>
+  //   recordedEvents: Promise<InsertRecordedEvent[] | undefined>
+  // } = {
+  //   scheduledEvents: new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll(),
+  //   recordedEvents: new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
+  // }
 
-  // const recordedEvents: GetAll<typeof recordedEvent> =
-  //   new RecordedEventRepository().getAllRecordedEvents()
+  const events = async () => ({
+    scheduledEvents: await new TypedEventRepository<ScheduledEvent>(
+      scheduledEvent,
+    ).getAll(),
+    recordedEvents: await new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
+  })
 
-  const events = [scheduledEvents, recordedEvents]
-
+  // const events = async () => {
+  //   scheduledEvents: await new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll(),
+  //   recordedEvents: await new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
+  // }
+  // const events = {
+  //   scheduledEvents: {},
+  //   recordedEvents: new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
+  // }
+  // ;(async () => {
+  //   events.scheduledEvents = await new TypedEventRepository<ScheduledEvent>(
+  //     scheduledEvent,
+  //   ).getAll()
+  // })()
   const ref = useRef(null)
 
   const { elY, elH } = useMouse(ref)
 
   const getStartTime = (elY: number, elH: number) => {
     const coordinateInMinutes = Math.round((elY / elH) * 1440)
-    let startTime = startOfDay(selectedDate)
 
     // Round up to the nearest half hour
     // set -15 for an adjustment
     const roundedMinutes = Math.round((coordinateInMinutes - 15) / 30) * 30
 
+    let startTime = startOfDay(selectedDate)
     startTime = setMinutes(
       setHours(startTime, Math.floor(roundedMinutes / 60)),
       roundedMinutes % 60,

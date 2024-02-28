@@ -7,6 +7,7 @@ import {
   timestamp,
   varchar,
   text,
+  datetime,
 } from "drizzle-orm/mysql-core"
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm"
 import type { AdapterAccount } from "@auth/core/adapters"
@@ -92,8 +93,12 @@ export const scheduledEvent = mysqlTable("scheduled_event", {
   updatedAt: timestamp("updated_at").defaultNow(),
   eventId: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
-  startTime: varchar("start_time", { length: 255 }).default(new Date().toISOString()),
-  endTime: varchar("end_time", { length: 255 }).default(new Date().toISOString()),
+  startTime: timestamp("start_time", { fsp: 3 }),
+  endTime: timestamp("end_time", { fsp: 3 }),
+  // startTime: varchar("start_time", { length: 255 }),
+  // endTime: varchar("end_time", { length: 255 }),
+  // startTime: datetime("start_time", { fsp: 3 }),
+  // endTime: datetime("end_time", { fsp: 3 }),
   isArchived: boolean("is_archived").default(false),
   color: varchar("color", { length: 6 }),
 })
@@ -106,8 +111,10 @@ export const recordedEvent = mysqlTable("recorded_event", {
   eventId: varchar("event_id", { length: 255 }),
   title: varchar("title", { length: 255 }).notNull(),
   status: varchar("status", { length: 255 }),
-  startTime: varchar("start_time", { length: 255 }).default(new Date().toISOString()),
-  endTime: varchar("end_time", { length: 255 }).default(new Date().toISOString()),
+  startTime: timestamp("start_time", { fsp: 3 }),
+  endTime: timestamp("end_time", { fsp: 3 }),
+  // startTime: varchar("start_time", { length: 255 }),
+  // endTime: varchar("end_time", { length: 255 }),
   isArchived: boolean("is_archived").default(false),
   color: varchar("color", { length: 6 }),
 })

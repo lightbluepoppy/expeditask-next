@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form"
 import { UseFormReturn } from "react-hook-form"
 import { db } from "src/db/server"
 import { EventRepository } from "src/utils/repositories/eventRepository"
-import { EventInstanceRepository } from "src/utils/repositories/eventInstanceRepository"
+// import { EventRepository } from "src/utils/repositories/eventInstanceRepository"
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
 

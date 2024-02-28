@@ -15,7 +15,7 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
 
   const targetDate = date.getDate()
 
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = events.scheduledEvents.filter((event) => {
     const eventStartDate = new Date(event.startTime).getDate()
     const eventEndDate = new Date(event[eventProperty("end")]).getDate()
 

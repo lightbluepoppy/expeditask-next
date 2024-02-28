@@ -34,13 +34,12 @@ export type Props = {
 
 export type EventProps = {
   date: Date
-  events: CalendarEvent[]
+  events: GetAllEvents
   type: EventType
 }
 
 export type NewEventProps = {
   date: Date
-  events: InsertScheduledEvent | InsertRecordedEvent
   type: EventType
 }
 
@@ -88,3 +87,7 @@ export type QueryInput = {
 }
 
 export type GetAll<T extends Tables> = Promise<InferInsertModel<T>[] | undefined>
+export type GetAllEvents = () => {
+  scheduledEvents: Promise<InsertScheduledEvent[] | undefined>
+  recordedEvents: Promise<InsertRecordedEvent[] | undefined>
+}

@@ -1,21 +1,18 @@
 "use client"
 import { Events } from "src/components/calendar/Events"
 import { localeDate, toCapitalize } from "src/utils/utils"
-import {
+import type {
   EventType,
   DailyEventColumProps,
-  GetAll,
-  RecordedEvent,
   ScheduledEvent,
-  GetAllEvents,
-  InsertScheduledEvent,
-  InsertRecordedEvent,
+  RecordedEvent,
 } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
 import { useMouse } from "react-use"
 import { useRef } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
+import { allRecordedEvents, allScheduledEvents } from "src/utils/data"
 import { TypedEventRepository } from "src/utils/repositories/typedEventRepository"
 import { recordedEvent, scheduledEvent } from "src/db/schema/schema"
 
@@ -26,34 +23,18 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
 
   const types: EventType[] = ["scheduled", "recorded"]
 
-  // const events: {
-  //   scheduledEvents: Promise<InsertScheduledEvent[] | undefined>
-  //   recordedEvents: Promise<InsertRecordedEvent[] | undefined>
-  // } = {
-  //   scheduledEvents: new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll(),
-  //   recordedEvents: new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
-  // }
+  const typedEvents = [allScheduledEvents, allRecordedEvents]
 
-  const events = async () => ({
-    scheduledEvents: await new TypedEventRepository<ScheduledEvent>(
-      scheduledEvent,
-    ).getAll(),
-    recordedEvents: await new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
-  })
-
-  // const events = async () => {
-  //   scheduledEvents: await new TypedEventRepository<ScheduledEvent>(scheduledEvent).getAll(),
-  //   recordedEvents: await new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
-  // }
-  // const events = {
-  //   scheduledEvents: {},
-  //   recordedEvents: new TypedEventRepository<RecordedEvent>(recordedEvent).getAll(),
-  // }
-  // ;(async () => {
-  //   events.scheduledEvents = await new TypedEventRepository<ScheduledEvent>(
+  // async function typedEvents() {
+  //   const allScheduledEvents = await new TypedEventRepository<ScheduledEvent>(
   //     scheduledEvent,
   //   ).getAll()
-  // })()
+  //   const allRecordedEvents = await new TypedEventRepository<RecordedEvent>(
+  //     recordedEvent,
+  //   ).getAll()
+  //   return [allScheduledEvents, allRecordedEvents]
+  // }
+
   const ref = useRef(null)
 
   const { elY, elH } = useMouse(ref)
@@ -81,21 +62,20 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
       type: type,
       startTime: getStartTime(elY, elH),
       endTime: addMinutes(getStartTime(elY, elH), 30),
-      color: "",
     })
   }
 
   return (
     <div className="flex" id={localeDate(selectedDate)} key={localeDate(selectedDate)}>
-      {types.map((type, index) => (
+      {typedEvents.map((events, index) => (
         <div
           ref={ref}
           key={index}
           className="relative flex w-[100px] flex-col justify-evenly overflow-hidden border-l border-slate-400"
-          onClick={handleNewEventClick(type)}
+          onClick={handleNewEventClick(types[index])}
         >
-          <NewEvent date={selectedDate} type={type} />
-          <Events date={selectedDate} events={events} type={type} />
+          <NewEvent date={selectedDate} type={types[index]} />
+          {/* <Events date={selectedDate} events={events} type={types[index]} /> */}
         </div>
       ))}
     </div>

@@ -1,5 +1,5 @@
 import { TimeType, EventProps, NewEventProps } from "src/types"
-import { localeTime, localeDate, toCapitalize } from "src/utils/utils"
+import { localeTime, localeDate, toCapitalize } from "src/libs/utils"
 import { useSelectedEventStore } from "src/stores/stores"
 import { startOfDay } from "date-fns"
 

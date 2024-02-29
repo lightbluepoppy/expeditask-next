@@ -2,14 +2,14 @@
 
 import * as React from "react"
 
-import { cn } from "src/utils/utils"
+import { cn } from "src/libs/utils"
 import { Button } from "src/components/ui/button"
 import { Input } from "src/components/ui/input"
 import { Label } from "src/components/ui/label"
 import { FiGithub } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 import { useRouter } from "next/navigation"
-import { getServerSideProps } from "src/utils/auth"
+import { getServerSideProps } from "src/libs/auth"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}

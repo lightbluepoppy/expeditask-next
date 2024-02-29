@@ -1,23 +1,35 @@
 "use client"
 import { useEffect, useMemo, useRef, RefObject, createRef, forwardRef } from "react"
 import { useClickAway } from "react-use"
-import { TimeType, EventProps } from "src/types"
-import { localeTime, localeDate } from "src/utils/utils"
-import { CalendarEvent } from "src/types"
+import {
+  TimeType,
+  EventProps,
+  SelectRecordedEvent,
+  SelectScheduledEvent,
+} from "src/types"
+import { localeTime, localeDate } from "src/libs/utils"
 import { useSelectedEventStore } from "src/stores/stores"
 
 export const Events: React.FC<EventProps> = ({ date, events, type }) => {
-  const eventKey = type === "scheduled" ? "scheduled" : "recorded"
-  // const eventProperty = (timeType: TimeType) =>
-  //   (timeType === "start"
-  //     ? `${eventKey}StartTime`
-  //     : `${eventKey}EndTime`) as keyof CalendarEvent
-
   const targetDate = date.getDate()
 
-  const filteredEvents = events.scheduledEvents.filter((event) => {
-    const eventStartDate = new Date(event.startTime).getDate()
-    const eventEndDate = new Date(event[eventProperty("end")]).getDate()
+  // function isScheduledEvent(
+  //   event: SelectScheduledEvent | SelectRecordedEvent,
+  // ): event is SelectScheduledEvent {
+  //   return (event as SelectScheduledEvent) !== undefined
+  // }
+
+  // const typedEvents = events?.filter((event) => {
+  //   if (type === "scheduled") {
+  //     return isScheduledEvent(event)
+  //   } else {
+  //     return !isScheduledEvent(event)
+  //   }
+  // })
+
+  const filteredEvents = events?.filter((event) => {
+    const eventStartDate = event.startTime.getDate()
+    const eventEndDate = event.endTime.getDate()
 
     const isOneDayEventComponent =
       targetDate === eventStartDate && targetDate === eventEndDate
@@ -36,9 +48,9 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
     )
   })
 
-  const eventComponentInfo = (event: CalendarEvent) => {
-    const eventStartTime = new Date(event[eventProperty("start")])
-    const eventEndTime = new Date(event[eventProperty("end")])
+  const eventComponentInfo = (event: SelectScheduledEvent | SelectRecordedEvent) => {
+    const eventStartTime = event.startTime
+    const eventEndTime = event.endTime
     const startTimeDate = eventStartTime.getDate()
     const endTimeDate = eventEndTime.getDate()
 
@@ -73,17 +85,14 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
       height = bottom
     }
 
-    return { eventStartTime, eventEndTime, top, height }
+    return { top, height }
   }
 
   const selectedEvent = useSelectedEventStore((state) => state.selectedEvent)
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
-  return filteredEvents.map((event) => {
-    const { eventStartTime, eventEndTime, top, height } = useMemo(
-      () => eventComponentInfo(event),
-      [event],
-    )
+  return filteredEvents?.map((event) => {
+    const { top, height } = useMemo(() => eventComponentInfo(event), [event])
 
     const id = selectedEvent?.id
 
@@ -97,8 +106,8 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
         id: eventComponentId,
         title: event.title,
         type: type,
-        startTime: eventStartTime.toISOString(),
-        endTime: eventEndTime.toISOString(),
+        startTime: event.startTime,
+        endTime: event.endTime,
       })
     }
 
@@ -117,10 +126,10 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
           onClick={(e) => handleEventClick(e)}
         >
           <h3 className="text-sm font-bold">{event.title}</h3>
-          <p className="text-xs">{localeDate(eventStartTime)}</p>
-          <p className="text-xs">{localeTime(eventStartTime)}</p>
-          <p className="text-xs">{localeDate(eventEndTime)}</p>
-          <p className="text-xs">{localeTime(eventEndTime)}</p>
+          <p className="text-xs">{localeDate(event.startTime)}</p>
+          <p className="text-xs">{localeTime(event.startTime)}</p>
+          <p className="text-xs">{localeDate(event.endTime)}</p>
+          <p className="text-xs">{localeTime(event.endTime)}</p>
         </div>
       </div>
     )

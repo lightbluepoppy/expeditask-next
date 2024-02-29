@@ -15,9 +15,7 @@ export const useSelectedDateStore = create<SelectedDateStore>()((set) => ({
     })),
 }))
 
-export const useSelectedEventStore = create<
-  SelectedEventStore<SelectScheduledEvent | SelectRecordedEvent>
->()((set) => ({
+export const useSelectedEventStore = create<SelectedEventStore>()((set) => ({
   selectedEvent: undefined,
   setSelectedEvent: (event) => set({ selectedEvent: event }),
   resetSelectedEvent: () => set({ selectedEvent: undefined }),

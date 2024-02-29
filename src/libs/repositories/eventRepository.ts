@@ -1,6 +1,6 @@
 import type { InsertEvent, QueryInput, SelectEvent } from "src/types"
 import { event } from "src/db/schema/schema"
-import { BaseRepository } from "src/utils/repositories/baseRepository"
+import { BaseRepository } from "src/libs/repositories/baseRepository"
 
 export class EventRepository {
   private eventRepository = new BaseRepository<typeof event>(event)
@@ -9,8 +9,8 @@ export class EventRepository {
     return this.eventRepository.get(data)
   }
 
-  async getAllEvents(data: QueryInput["userId"]) {
-    return this.eventRepository.getAll(data)
+  async getAllEvents() {
+    return this.eventRepository.getAll()
   }
 
   async createEvent(data: InsertEvent) {

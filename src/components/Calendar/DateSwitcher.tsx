@@ -1,6 +1,6 @@
 "use client"
 import { useSelectedDateStore } from "src/stores/stores"
-import { localeDate } from "src/utils/utils"
+import { localeDate } from "src/libs/utils"
 
 export const DateSwitcher: React.FC = () => {
   const selectedDate = useSelectedDateStore((state) => state.selectedDate)

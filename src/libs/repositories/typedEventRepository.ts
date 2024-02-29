@@ -1,8 +1,8 @@
 import type { QueryInput, ScheduledEvent, RecordedEvent } from "src/types"
-import { BaseRepository } from "src/utils/repositories/baseRepository"
+import { BaseRepository } from "src/libs/repositories/baseRepository"
 import { InferInsertModel, and, eq, between } from "drizzle-orm"
 import { db } from "src/db/server"
-import { InternalServerError } from "src/utils/errors"
+import { InternalServerError } from "src/libs/errors"
 import { addDays, subDays } from "date-fns"
 import { getServerSession } from "next-auth"
 
@@ -39,21 +39,21 @@ export class TypedEventRepository<T extends ScheduledEvent | RecordedEvent> {
     const session = await getServerSession()
     if (!session?.user) return
     try {
-      const res = await db
+      const result = await db
         .select()
         .from(this.table as T)
         .where(
           and(
             eq(this.table.userId, session.user.userId),
-            between(
-              this.table.startTime,
-              subDays(this.table.startTime.toString(), 7),
-              addDays(this.table.startTime.toString(), 7),
-            ),
+            // between(
+            //   this.table.startTime,
+            //   subDays(new Date(this.table.startTime), 7),
+            //   addDays(new Date(this.table.endTime), 7),
+            // ),
           ),
         )
-      if (!res) throw new InternalServerError()
-      return res
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)

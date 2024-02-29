@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { useSelectedEventStore } from "src/stores/stores"
-import { EventComponentProps } from "src/types"
 
 import { EditorCard } from "src/components/calendar/EditorCard"
 
 type AnimateEditorProps = {
   children: React.ReactNode
-  previousId: EventComponentProps["id"] | undefined
+  previousId: string | undefined
 }
 
 const AnimateEditor: React.FC<AnimateEditorProps> = ({ children, previousId }) => {

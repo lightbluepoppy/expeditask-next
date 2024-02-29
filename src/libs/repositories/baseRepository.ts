@@ -1,7 +1,7 @@
 import { db } from "src/db/server"
 import { InferInsertModel, eq, and } from "drizzle-orm"
 import { QueryInput, Tables } from "src/types"
-import { InternalServerError } from "src/utils/errors"
+import { InternalServerError } from "src/libs/errors"
 import { getServerSession } from "next-auth"
 
 /**
@@ -15,14 +15,14 @@ export class BaseRepository<T extends Tables> {
     const session = await getServerSession()
     if (!session?.user) return
     try {
-      const res = await db
+      const result = await db
         .select()
         .from(this.table as T)
         .where(
           and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
         )
-      if (!res) throw new InternalServerError()
-      return res
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)
@@ -35,12 +35,12 @@ export class BaseRepository<T extends Tables> {
     const session = await getServerSession()
     if (!session?.user) return
     try {
-      const res = await db
+      const result = await db
         .select()
         .from(this.table)
         .where(eq(this.table.userId, session.user.userId))
-      if (!res) throw new InternalServerError()
-      return res
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)
@@ -51,9 +51,9 @@ export class BaseRepository<T extends Tables> {
 
   async create(eventData: InferInsertModel<T>) {
     try {
-      const res = await db.insert(this.table).values(eventData)
-      if (!res) throw new InternalServerError()
-      return res
+      const result = await db.insert(this.table).values(eventData)
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)
@@ -70,14 +70,14 @@ export class BaseRepository<T extends Tables> {
         isArchived?: boolean
       } = {}
       updateObject.isArchived = true
-      const res = await db
+      const result = await db
         .update(this.table)
         .set(updateObject)
         .where(
           and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
         )
-      if (!res) throw new InternalServerError()
-      return res
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)
@@ -90,13 +90,13 @@ export class BaseRepository<T extends Tables> {
     const session = await getServerSession()
     if (!session?.user) return
     try {
-      const res = await db
+      const result = await db
         .delete(this.table)
         .where(
           and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
         )
-      if (!res) throw new InternalServerError()
-      return res
+      if (!result) throw new InternalServerError()
+      return result
     } catch (error) {
       if (error instanceof InternalServerError) {
         console.error(error.message)

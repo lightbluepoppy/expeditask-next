@@ -1,7 +1,7 @@
 "use client"
 import { MenuRadioGroupProps } from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
-import { toCapitalize } from "src/utils/utils"
+import { toCapitalize } from "src/libs/utils"
 import { useRouter, usePathname } from "next/navigation"
 
 import { Tabs, TabsList, TabsTrigger } from "src/components/ui/tabs"

@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { cn } from "src/utils/utils"
+import { cn } from "src/libs/utils"
 import { ResizablePanel, ResizablePanelGroup } from "src/components/ui/resizable"
 import { Separator } from "src/components/ui/separator"
 

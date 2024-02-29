@@ -1,7 +1,7 @@
-import { users, event, scheduledEvent, recordedEvent, tag } from "src/db/schema/schema"
+import { user, event, scheduledEvent, recordedEvent, tag } from "src/db/schema/schema"
 import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
-export type Users = typeof users
+export type Users = typeof user
 export type Event = typeof event
 export type ScheduledEvent = typeof scheduledEvent
 export type RecordedEvent = typeof recordedEvent
@@ -22,8 +22,6 @@ export type SelectRecordedEvent = InferSelectModel<RecordedEvent>
 export type InsertTags = InferInsertModel<Tag>
 export type SelectTags = InferSelectModel<Tag>
 
-export type CalendarEvent = InsertEvent
-
 export type EventType = "scheduled" | "recorded"
 export type TimeType = "start" | "end"
 export type CalendarView = "day" | "week"
@@ -32,9 +30,14 @@ export type Props = {
   children: React.ReactNode
 }
 
+export type AllEvents = {
+  scheduledEvents: SelectScheduledEvent[] | undefined
+  recordedEvents: SelectRecordedEvent[] | undefined
+}
+
 export type EventProps = {
   date: Date
-  events: GetAllEvents
+  events: (SelectScheduledEvent[] | undefined) | (SelectRecordedEvent[] | undefined)
   type: EventType
 }
 
@@ -52,16 +55,45 @@ export type EventEditorProps = {
   top: number
 }
 
-export type EventComponentProps<T extends SelectScheduledEvent | SelectRecordedEvent> = {
-  id: T["id"]
-  title: T["title"]
+// export type EventComponentProps<T extends SelectScheduledEvent | SelectRecordedEvent> = {
+//   id: T["id"]
+//   title: T["title"]
+//   type: EventType
+//   startTime: T["startTime"]
+//   endTime?: T["endTime"]
+//   color: T["color"]
+//   scheduledEventId: T["scheduledEventId"]
+//   status?: T["status"]
+// }
+
+export type ScheduledEventComponentProps = {
+  id: SelectScheduledEvent["id"]
+  title: SelectScheduledEvent["title"]
   type: EventType
-  startTime: T["startTime"]
-  endTime?: T["endTime"]
-  color: T["color"]
+  startTime: SelectScheduledEvent["startTime"]
+  endTime?: SelectScheduledEvent["endTime"]
+  color: SelectScheduledEvent["color"]
+}
+export type RecordedEventComponentProps = {
+  id: SelectRecordedEvent["id"]
+  title: SelectRecordedEvent["title"]
+  type: EventType
+  startTime: SelectRecordedEvent["startTime"]
+  endTime?: SelectRecordedEvent["endTime"]
+  color: SelectRecordedEvent["color"]
+  scheduledEventId: SelectRecordedEvent["scheduledEventId"]
+  status: SelectRecordedEvent["status"]
 }
 
-export type EventGenericTypes = SelectScheduledEvent | SelectRecordedEvent
+export type SelectedEvent = {
+  id: InsertScheduledEvent["id"]
+  title: InsertScheduledEvent["title"]
+  type: string
+  startTime: InsertScheduledEvent["startTime"]
+  endTime: InsertScheduledEvent["endTime"]
+}
+
+export type EventTypes = SelectScheduledEvent | SelectRecordedEvent
 
 export type SelectedDateStore = {
   selectedDate: Date
@@ -69,9 +101,9 @@ export type SelectedDateStore = {
   changeSelectedDateBy: (day: number) => void
 }
 
-export type SelectedEventStore<T extends SelectScheduledEvent | SelectRecordedEvent> = {
-  selectedEvent: EventComponentProps<T> | undefined
-  setSelectedEvent: (event: EventComponentProps<T>) => void
+export type SelectedEventStore = {
+  selectedEvent: SelectedEvent | undefined
+  setSelectedEvent: (event: SelectedEvent) => void
   resetSelectedEvent: () => void
 }
 

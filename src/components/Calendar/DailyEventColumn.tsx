@@ -1,6 +1,6 @@
 "use client"
 import { Events } from "src/components/calendar/Events"
-import { localeDate, toCapitalize } from "src/utils/utils"
+import { localeDate, toCapitalize } from "src/libs/utils"
 import type {
   EventType,
   DailyEventColumProps,
@@ -12,28 +12,24 @@ import { useMouse } from "react-use"
 import { useRef } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
-import { allRecordedEvents, allScheduledEvents } from "src/utils/data"
-import { TypedEventRepository } from "src/utils/repositories/typedEventRepository"
+import { getAllScheduledEvents, getAllRecordedEvents } from "src/libs/data"
+import { TypedEventRepository } from "src/libs/repositories/typedEventRepository"
 import { recordedEvent, scheduledEvent } from "src/db/schema/schema"
 
-export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
+export const revalidate = 3600 // revalidate the data at most every hour
+
+export const DailyEventColumn: React.FC<DailyEventColumProps> = async ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
   const types: EventType[] = ["scheduled", "recorded"]
 
-  const typedEvents = [allScheduledEvents, allRecordedEvents]
+  // const typedEvents = [getAllRecordedEvents, getAllRecordedEvents]
 
-  // async function typedEvents() {
-  //   const allScheduledEvents = await new TypedEventRepository<ScheduledEvent>(
-  //     scheduledEvent,
-  //   ).getAll()
-  //   const allRecordedEvents = await new TypedEventRepository<RecordedEvent>(
-  //     recordedEvent,
-  //   ).getAll()
-  //   return [allScheduledEvents, allRecordedEvents]
-  // }
+  const scheduledEvents = await getAllScheduledEvents()
+  const recordedEvents = await getAllRecordedEvents()
+  const typedEvents = [scheduledEvents, recordedEvents]
 
   const ref = useRef(null)
 
@@ -75,7 +71,7 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = ({ date }) => {
           onClick={handleNewEventClick(types[index])}
         >
           <NewEvent date={selectedDate} type={types[index]} />
-          {/* <Events date={selectedDate} events={events} type={types[index]} /> */}
+          <Events date={selectedDate} events={events} type={types[index]} />
         </div>
       ))}
     </div>

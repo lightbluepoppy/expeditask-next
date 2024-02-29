@@ -16,17 +16,14 @@ import {
   FormMessage,
 } from "src/components/ui/form"
 import { useSelectedEventStore } from "src/stores/stores"
-import { localeDate, localeTime } from "src/utils/utils"
+import { localeDate, localeTime } from "src/libs/utils"
 import { X } from "lucide-react"
-import { useState } from "react"
-import { CalendarEvent } from "src/types"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { UseFormReturn } from "react-hook-form"
-import { db } from "src/db/server"
-import { EventRepository } from "src/utils/repositories/eventRepository"
-// import { EventRepository } from "src/utils/repositories/eventInstanceRepository"
+import { TypedEventRepository } from "src/libs/repositories/typedEventRepository"
+import { scheduledEvent } from "src/db/schema/schema"
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
 
@@ -137,7 +134,7 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
   // }
 
   const handleCreateEventInstance = async () => {
-    const res = new EventInstanceRepository().createEventInstance(form.getValues())
+    const res = new TypedEventRepository(scheduledEvent).create()
   }
 
   return (

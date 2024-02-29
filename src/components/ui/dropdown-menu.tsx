@@ -5,7 +5,7 @@ import Link from "next/link"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
 
-import { cn } from "src/utils/utils"
+import { cn } from "src/libs/utils"
 import { Url } from "next/dist/shared/lib/router/router"
 
 const DropdownMenu = DropdownMenuPrimitive.Root

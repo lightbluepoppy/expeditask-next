@@ -6,10 +6,8 @@ import {
   primaryKey,
   timestamp,
   varchar,
-  text,
-  datetime,
 } from "drizzle-orm/mysql-core"
-import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 import type { AdapterAccount } from "@auth/core/adapters"
 import { createId } from "@paralleldrive/cuid2"
 
@@ -17,17 +15,17 @@ export const user = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("email_verified", { mode: "date", fsp: 3 }).defaultNow(),
+  emailVerified: timestamp("emailVerified", { mode: "date", fsp: 3 }).defaultNow(),
   image: varchar("image", { length: 255 }),
 })
 
-export const account = mysqlTable(
+export const accounts = mysqlTable(
   "account",
   {
-    userId: varchar("user_id", { length: 255 }).notNull(),
+    userId: varchar("userId", { length: 255 }),
     type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("provider_accountId", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
     expires_at: int("expires_at"),
@@ -43,14 +41,14 @@ export const account = mysqlTable(
   }),
 )
 
-export const session = mysqlTable("session", {
-  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
-  userId: varchar("user_id", { length: 255 }).notNull(),
+export const sessions = mysqlTable("session", {
+  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
 
-export const verificationToken = mysqlTable(
-  "verification_token",
+export const verificationTokens = mysqlTable(
+  "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),
@@ -70,7 +68,7 @@ export const recursiveEvent = mysqlTable("recursive_event", {
   recursive_interval: json("recursive_interval"),
 })
 
-const baseEventColumns = {
+const baseColumns = {
   userId: varchar("user_id", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -79,9 +77,10 @@ const baseEventColumns = {
   color: varchar("color", { length: 6 }),
 }
 
-const baseTypeEventColumns = {
+const baseTypedEventColumns = {
   startTime: timestamp("start_time", { fsp: 3 }).notNull(),
   endTime: timestamp("end_time", { fsp: 3 }).notNull(),
+  status: varchar("status", { length: 255 }),
 }
 
 export const event = mysqlTable("event", {
@@ -89,27 +88,21 @@ export const event = mysqlTable("event", {
     .$defaultFn(() => createId())
     .primaryKey()
     .unique(),
-  ...baseEventColumns,
+  ...baseColumns,
 })
 
 export const scheduledEvent = mysqlTable("scheduled_event", {
   id: varchar("id", { length: 255 }).primaryKey().unique(),
   eventId: varchar("event_id", { length: 255 }),
-  ...baseEventColumns,
-  ...baseTypeEventColumns,
+  ...baseColumns,
+  ...baseTypedEventColumns,
 })
 
 export const recordedEvent = mysqlTable("recorded_event", {
   id: varchar("id", { length: 255 }).primaryKey().unique(),
-  ...baseEventColumns,
-  ...baseTypeEventColumns,
+  ...baseColumns,
+  ...baseTypedEventColumns,
   scheduledEventId: varchar("scheduled_event_id", { length: 255 }),
-  status: varchar("status", { length: 255 }),
-})
-
-export const tagEvent = mysqlTable("tag_event", {
-  eventId: varchar("eventId", { length: 255 }),
-  tagId: varchar("tagId", { length: 255 }),
 })
 
 export const tag = mysqlTable("tag", {
@@ -117,30 +110,33 @@ export const tag = mysqlTable("tag", {
     .$defaultFn(() => createId())
     .primaryKey()
     .unique(),
-  userId: varchar("user_id", { length: 255 }),
-  title: varchar("title", { length: 255 }),
-  color: varchar("color", { length: 255 }),
+  ...baseColumns,
+})
+
+export const tagEvent = mysqlTable("tag_event", {
+  eventId: varchar("eventId", { length: 255 }).unique(),
+  tagId: varchar("tagId", { length: 255 }),
 })
 
 export const userRelations = relations(user, ({ one, many }) => ({
-  account: one(account),
-  session: one(session),
+  accounts: one(accounts),
+  sessions: one(sessions),
   scheduledEvent: many(scheduledEvent),
   recordedEvent: many(recordedEvent),
   events: many(event),
   tag: many(tag),
 }))
 
-export const accountRelations = relations(account, ({ one }) => ({
+export const accountRelations = relations(accounts, ({ one }) => ({
   user: one(user, {
-    fields: [account.userId],
+    fields: [accounts.userId],
     references: [user.id],
   }),
 }))
 
-export const sessionRelations = relations(session, ({ one }) => ({
+export const sessionRelations = relations(sessions, ({ one }) => ({
   user: one(user, {
-    fields: [session.userId],
+    fields: [sessions.userId],
     references: [user.id],
   }),
 }))
@@ -173,4 +169,12 @@ export const recursiveEventRelations = relations(recursiveEvent, ({ many }) => (
 export const tagRelations = relations(tag, ({ one, many }) => ({
   event: many(event),
   user: one(user),
+}))
+
+export const tagEventRelations = relations(tagEvent, ({ one, many }) => ({
+  event: one(event, {
+    fields: [tagEvent.eventId],
+    references: [event.id],
+  }),
+  tag: many(tag),
 }))

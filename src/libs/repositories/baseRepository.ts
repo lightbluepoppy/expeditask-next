@@ -2,7 +2,7 @@ import { db } from "src/db/server"
 import { InferInsertModel, eq, and } from "drizzle-orm"
 import { QueryInput, Tables } from "src/types"
 import { InternalServerError } from "src/libs/errors"
-import { getServerSession } from "next-auth"
+import { auth } from "src/libs/auth"
 
 /**
  * @param T Table name
@@ -12,7 +12,7 @@ export class BaseRepository<T extends Tables> {
   constructor(private table: T) {}
 
   async get(data: QueryInput) {
-    const session = await getServerSession()
+    const session = await auth()
     if (!session?.user) return
     try {
       const result = await db
@@ -31,10 +31,17 @@ export class BaseRepository<T extends Tables> {
     }
   }
 
-  // async getAll(session) {
   async getAll() {
-    const session = await getServerSession()
-    if (!session?.user) return
+    const session = await auth()
+
+    try {
+      if (!session?.user) throw new Error()
+      console.log(session)
+    } catch (error) {
+      console.error(error)
+      return
+    }
+
     try {
       const result = await db
         .select()
@@ -64,7 +71,7 @@ export class BaseRepository<T extends Tables> {
   }
 
   async archive(data: QueryInput) {
-    const session = await getServerSession()
+    const session = await auth()
     if (!session?.user) return
     try {
       const updateObject: { [Key in keyof T["_"]["columns"]]?: any } & {
@@ -88,7 +95,7 @@ export class BaseRepository<T extends Tables> {
   }
 
   async delete(data: QueryInput) {
-    const session = await getServerSession()
+    const session = await auth()
     if (!session?.user) return
     try {
       const result = await db

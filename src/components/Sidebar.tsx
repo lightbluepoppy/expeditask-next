@@ -55,7 +55,6 @@ export const Sidebar = () => {
                 </svg>
                 <span className="ml-3 flex-1 whitespace-nowrap">Home</span>
               </a>
-              {JSON.stringify(session, null, 2)}
             </li>
           </ul>
           <div className="mt-auto">

@@ -73,11 +73,10 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
   return filteredEvents?.map((event) => {
-    const { top, height } = useMemo(() => eventComponentInfo(event), [event])
+    // const { top, height } = useMemo(() => eventComponentInfo(event), [event])
+    const { top, height } = eventComponentInfo(event)
 
     const id = selectedEvent?.id
-
-    const ref = useRef<HTMLDivElement>(null)
 
     const eventComponentId = `${type === "scheduled" ? "skd" : "rec"}-${event.id}`
 
@@ -91,6 +90,7 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
         endTime: event.endTime,
       })
     }
+    // const ref = useRef<HTMLDivElement>(null)
 
     return (
       <div
@@ -102,7 +102,7 @@ export const Events: React.FC<EventProps> = ({ date, events, type }) => {
         }}
       >
         <div
-          ref={ref}
+          // ref={ref}
           className={`outline-solid h-full cursor-pointer rounded-sm bg-blue-100 p-2 ${eventComponentId === id ? "shadow-2xl" : "shadow-none"} transition-shadow duration-200 ease-in-out`}
           onClick={(e) => handleEventClick(e)}
         >

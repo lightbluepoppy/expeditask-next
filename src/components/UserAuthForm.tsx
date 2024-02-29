@@ -9,19 +9,14 @@ import { Label } from "src/components/ui/label"
 import { FiGithub } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 import { useRouter } from "next/navigation"
-import { getServerSideProps } from "src/libs/auth"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  // const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const handleLogin = (provider: string) => () => {
     signIn(provider, { callbackUrl: `http://localhost:3000/calendar/day` })
   }
-
-  const { data: session, status } = useSession()
-  // console.log(status)
 
   return (
     <div className={cn("grid", className)} {...props}>

@@ -31,6 +31,7 @@ export class BaseRepository<T extends Tables> {
     }
   }
 
+  // async getAll(session) {
   async getAll() {
     const session = await getServerSession()
     if (!session?.user) return
@@ -51,7 +52,7 @@ export class BaseRepository<T extends Tables> {
 
   async create(eventData: InferInsertModel<T>) {
     try {
-      const result = await db.insert(this.table).values(eventData)
+      const result = await db.insert(this.table).values(eventData as any)
       if (!result) throw new InternalServerError()
       return result
     } catch (error) {

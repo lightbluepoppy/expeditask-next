@@ -4,6 +4,9 @@ const nextConfig = {
   future: {
     webpack5: true,
   },
+  experimental: {
+    serverActions: true,
+  },
 }
 
 module.exports = nextConfig

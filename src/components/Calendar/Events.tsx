@@ -1,31 +1,12 @@
 "use client"
 import { useEffect, useMemo, useRef, RefObject, createRef, forwardRef } from "react"
 import { useClickAway } from "react-use"
-import {
-  TimeType,
-  EventProps,
-  SelectRecordedEvent,
-  SelectScheduledEvent,
-} from "src/types"
+import { EventProps, SelectRecordedEvent, SelectScheduledEvent } from "src/types"
 import { localeTime, localeDate } from "src/libs/utils"
 import { useSelectedEventStore } from "src/stores/stores"
 
 export const Events: React.FC<EventProps> = ({ date, events, type }) => {
   const targetDate = date.getDate()
-
-  // function isScheduledEvent(
-  //   event: SelectScheduledEvent | SelectRecordedEvent,
-  // ): event is SelectScheduledEvent {
-  //   return (event as SelectScheduledEvent) !== undefined
-  // }
-
-  // const typedEvents = events?.filter((event) => {
-  //   if (type === "scheduled") {
-  //     return isScheduledEvent(event)
-  //   } else {
-  //     return !isScheduledEvent(event)
-  //   }
-  // })
 
   const filteredEvents = events?.filter((event) => {
     const eventStartDate = event.startTime.getDate()

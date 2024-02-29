@@ -1,3 +1,4 @@
+"use server"
 import { cache } from "react"
 import type { RecordedEvent, ScheduledEvent } from "src/types"
 import { TypedEventRepository } from "src/libs/repositories/typedEventRepository"

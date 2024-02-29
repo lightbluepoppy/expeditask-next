@@ -46,7 +46,7 @@ export type NewEventProps = {
   type: EventType
 }
 
-export type DailyEventColumProps = {
+export type DailyEventColumnProps = {
   date?: Date
 }
 

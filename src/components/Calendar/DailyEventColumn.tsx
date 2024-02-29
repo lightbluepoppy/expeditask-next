@@ -3,34 +3,43 @@ import { Events } from "src/components/calendar/Events"
 import { localeDate, toCapitalize } from "src/libs/utils"
 import type {
   EventType,
-  DailyEventColumProps,
+  DailyEventColumnProps,
   ScheduledEvent,
   RecordedEvent,
+  SelectScheduledEvent,
+  SelectRecordedEvent,
 } from "src/types"
 import { useSelectedDateStore, useSelectedEventStore } from "src/stores/stores"
 import { useMouse } from "react-use"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
 import { getAllScheduledEvents, getAllRecordedEvents } from "src/libs/data"
-import { TypedEventRepository } from "src/libs/repositories/typedEventRepository"
-import { recordedEvent, scheduledEvent } from "src/db/schema/schema"
 
 export const revalidate = 3600 // revalidate the data at most every hour
 
-export const DailyEventColumn: React.FC<DailyEventColumProps> = async ({ date }) => {
+export const DailyEventColumn: React.FC<DailyEventColumnProps> = ({ date }) => {
   const selectedDate =
     date === undefined ? useSelectedDateStore((state) => state.selectedDate) : date
   const setSelectedEvent = useSelectedEventStore((state) => state.setSelectedEvent)
 
   const types: EventType[] = ["scheduled", "recorded"]
 
-  // const typedEvents = [getAllRecordedEvents, getAllRecordedEvents]
+  // const typedEvents = [getAllScheduledEvents(), getAllRecordedEvents()]
+  const [events, setEvents] = useState<[SelectScheduledEvent[], SelectRecordedEvent[]]>([
+    [],
+    [],
+  ])
 
-  const scheduledEvents = await getAllScheduledEvents()
-  const recordedEvents = await getAllRecordedEvents()
-  const typedEvents = [scheduledEvents, recordedEvents]
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const scheduledEvents = await getAllScheduledEvents()
+      const recordedEvents = await getAllRecordedEvents()
+      setEvents([scheduledEvents!, recordedEvents!])
+    }
 
+    fetchEvents()
+  }, [])
   const ref = useRef(null)
 
   const { elY, elH } = useMouse(ref)
@@ -63,15 +72,15 @@ export const DailyEventColumn: React.FC<DailyEventColumProps> = async ({ date })
 
   return (
     <div className="flex" id={localeDate(selectedDate)} key={localeDate(selectedDate)}>
-      {typedEvents.map((events, index) => (
+      {types.map((type, index) => (
         <div
           ref={ref}
           key={index}
           className="relative flex w-[100px] flex-col justify-evenly overflow-hidden border-l border-slate-400"
-          onClick={handleNewEventClick(types[index])}
+          onClick={handleNewEventClick(type)}
         >
-          <NewEvent date={selectedDate} type={types[index]} />
-          <Events date={selectedDate} events={events} type={types[index]} />
+          <NewEvent date={selectedDate} type={type} />
+          <Events date={selectedDate} events={events[index]} type={type} />
         </div>
       ))}
     </div>

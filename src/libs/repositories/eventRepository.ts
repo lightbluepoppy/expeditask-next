@@ -5,15 +5,27 @@ import { BaseRepository } from "src/libs/repositories/baseRepository"
 export class EventRepository {
   private eventRepository = new BaseRepository<typeof event>(event)
 
-  async getEvent(data: QueryInput) {
+  async get(data: QueryInput) {
     return this.eventRepository.get(data)
   }
 
-  async getAllEvents() {
+  async getAll() {
     return this.eventRepository.getAll()
   }
 
-  async createEvent(data: InsertEvent) {
+  async create(data: InsertEvent) {
     return this.eventRepository.create(data)
+  }
+
+  async update(data: InsertEvent) {
+    return this.eventRepository.update(data)
+  }
+
+  async archive(data: QueryInput) {
+    return this.eventRepository.archive(data)
+  }
+
+  async delete(data: QueryInput) {
+    return this.eventRepository.delete(data)
   }
 }

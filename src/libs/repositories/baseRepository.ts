@@ -34,14 +34,7 @@ export class BaseRepository<T extends Tables> {
   async getAll() {
     const session = await auth()
 
-    try {
-      if (!session?.user) throw new Error()
-      console.log(session)
-    } catch (error) {
-      console.error(error)
-      return
-    }
-
+    if (!session?.user) throw new Error()
     try {
       const result = await db
         .select()
@@ -57,9 +50,30 @@ export class BaseRepository<T extends Tables> {
     }
   }
 
-  async create(eventData: InferInsertModel<T>) {
+  async create(data: InferInsertModel<T>) {
     try {
-      const result = await db.insert(this.table).values(eventData as any)
+      const result = await db.insert(this.table).values(data as any)
+      if (!result) throw new InternalServerError()
+      return result
+    } catch (error) {
+      if (error instanceof InternalServerError) {
+        console.error(error.message)
+        return
+      }
+    }
+  }
+
+  async update(data: InferInsertModel<T>) {
+    const session = await auth()
+    if (!session?.user) throw new Error()
+    try {
+      const result = await db
+        .update(this.table)
+        .set(data as any)
+        .where(
+          // it says 'Property 'id' does not exist' but fine
+          and(eq(this.table.userId, session.user.userId), eq(this.table.id, data.id)),
+        )
       if (!result) throw new InternalServerError()
       return result
     } catch (error) {
@@ -72,7 +86,7 @@ export class BaseRepository<T extends Tables> {
 
   async archive(data: QueryInput) {
     const session = await auth()
-    if (!session?.user) return
+    if (!session?.user) throw new Error()
     try {
       const updateObject: { [Key in keyof T["_"]["columns"]]?: any } & {
         isArchived?: boolean
@@ -96,7 +110,7 @@ export class BaseRepository<T extends Tables> {
 
   async delete(data: QueryInput) {
     const session = await auth()
-    if (!session?.user) return
+    if (!session?.user) throw new Error()
     try {
       const result = await db
         .delete(this.table)

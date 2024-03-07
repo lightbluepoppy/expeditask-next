@@ -14,7 +14,7 @@ import { useMouse } from "react-use"
 import { useEffect, useRef, useState } from "react"
 import { addMinutes, setMinutes, setHours, startOfDay } from "date-fns"
 import { NewEvent } from "src/components/calendar/NewEvent"
-import { getAllScheduledEvents, getAllRecordedEvents } from "src/libs/data"
+import { getAllScheduledEvents, getAllRecordedEvents } from "src/libs/actions"
 
 export const revalidate = 3600 // revalidate the data at most every hour
 

@@ -11,15 +11,19 @@ const CalendarHeader = () => (
   </div>
 )
 
+const CalendarContent: React.FC<Props> = ({ children }) => (
+  <div className="relative top-10 flex h-[1000px] flex-row overscroll-none">
+    <HourLabels />
+    <div className="flex h-full w-fit">{children}</div>
+  </div>
+)
+
 export const Calendar: React.FC<Props> = ({ children }) => {
   return (
     <div className="h-fit w-screen">
       <CalendarHeader />
-      <div className="relative top-10 flex h-[1000px] flex-row">
-        <HourLabels />
-        <div className="flex h-full w-fit">{children}</div>
-        <EventSideEditor />
-      </div>
+      <CalendarContent>{children}</CalendarContent>
+      <EventSideEditor />
     </div>
   )
 }

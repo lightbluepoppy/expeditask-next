@@ -4,7 +4,7 @@ import { InferInsertModel, and, eq, between } from "drizzle-orm"
 import { db } from "src/db/server"
 import { InternalServerError } from "src/libs/errors"
 import { addDays, subDays } from "date-fns"
-import { getServerSession } from "next-auth"
+import { auth } from "src/libs/auth"
 
 export class TypedEventRepository<T extends ScheduledEvent | RecordedEvent> {
   private typedEventRepository: BaseRepository<T>
@@ -23,8 +23,12 @@ export class TypedEventRepository<T extends ScheduledEvent | RecordedEvent> {
     return this.typedEventRepository.getAll()
   }
 
-  async create(eventData: InferInsertModel<T>) {
-    return this.typedEventRepository.create(eventData)
+  async create(data: InferInsertModel<T>) {
+    return this.typedEventRepository.create(data)
+  }
+
+  async update(data: InferInsertModel<T>) {
+    return this.typedEventRepository.update(data)
   }
 
   async delete(data: QueryInput) {
@@ -35,82 +39,21 @@ export class TypedEventRepository<T extends ScheduledEvent | RecordedEvent> {
     return this.typedEventRepository.delete(data)
   }
 
-  async getEventsByDate() {
-    const session = await getServerSession()
-    if (!session?.user) return
-    try {
-      const result = await db
-        .select()
-        .from(this.table as T)
-        .where(
-          and(
-            eq(this.table.userId, session.user.userId),
-            // between(
-            //   this.table.startTime,
-            //   subDays(new Date(this.table.startTime), 7),
-            //   addDays(new Date(this.table.endTime), 7),
-            // ),
-          ),
-        )
-      if (!result) throw new InternalServerError()
-      return result
-    } catch (error) {
-      if (error instanceof InternalServerError) {
-        console.error(error.message)
-        return
-      }
-    }
-  }
+  // async getEventsByDate() {
+  //   const session = await auth()
+  //   if (!session?.user) return
+  //   try {
+  //     const result = await db
+  //       .select()
+  //       .from(this.table as T)
+  //       .where(and(eq(this.table.userId, session.user.userId)))
+  //     if (!result) throw new InternalServerError()
+  //     return result
+  //   } catch (error) {
+  //     if (error instanceof InternalServerError) {
+  //       console.error(error.message)
+  //       return
+  //     }
+  //   }
+  // }
 }
-
-// export class ScheduledEventRepository {
-//   private scheduledEventRepository = new TypedEventRepository<typeof scheduledEvent>(
-//     scheduledEvent,
-//   )
-
-//   async getScheduledEvents(data: QueryInput) {
-//     return this.scheduledEventRepository.get(data)
-//   }
-
-//   async getAllScheduledEvents(): Promise<InsertRecordedEvent[] | undefined> {
-//     return this.scheduledEventRepository.getAll()
-//   }
-
-//   async createScheduledEvent(eventData: InsertScheduledEvent) {
-//     return this.scheduledEventRepository.create(eventData)
-//   }
-
-//   async archiveScheduledEvent(data: QueryInput) {
-//     return this.scheduledEventRepository.archive(data)
-//   }
-
-//   async deleteScheduledEvent(data: QueryInput) {
-//     return this.scheduledEventRepository.delete(data)
-//   }
-// }
-
-// export class RecordedEventRepository {
-//   private recordedEventRepository = new BaseRepository<typeof recordedEvent>(
-//     recordedEvent,
-//   )
-
-//   async getRecordedEvent(data: QueryInput) {
-//     return this.recordedEventRepository.get(data)
-//   }
-
-//   async getAllRecordedEvents() {
-//     return this.recordedEventRepository.getAll()
-//   }
-
-//   async createRecordedEvents(eventData: InsertRecordedEvent) {
-//     return this.recordedEventRepository.create(eventData)
-//   }
-
-//   async archiveRecordedEvent(data: QueryInput) {
-//     return this.recordedEventRepository.archive(data)
-//   }
-
-//   async deleteRecordedEvent(data: QueryInput) {
-//     return this.recordedEventRepository.delete(data)
-//   }
-// }

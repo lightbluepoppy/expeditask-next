@@ -24,6 +24,9 @@ import { useForm } from "react-hook-form"
 import { UseFormReturn } from "react-hook-form"
 import { TypedEventRepository } from "src/libs/repositories/typedEventRepository"
 import { scheduledEvent } from "src/db/schema/schema"
+import { createScheduledEvent, deleteScheduledEvent } from "src/libs/actions"
+import { QueryInput, SelectScheduledEvent } from "src/types"
+import { createId } from "@paralleldrive/cuid2"
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
 
@@ -70,7 +73,7 @@ const formSchema = z
   )
 
 type EventDateInput = React.FC<{
-  time: string
+  time: Date
   form: UseFormReturn<z.infer<typeof formSchema>>
   type: number
 }>
@@ -129,12 +132,27 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
     console.log(new Date())
   }
 
-  // const handleFormSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  // }
+  const handleDeleteEvent = async (data: QueryInput) => {
+    // get id of the event
+    // pass the id to the handler
+    const deleteEvent = await deleteScheduledEvent(data)
+  }
 
-  const handleCreateEventInstance = async () => {
-    const res = new TypedEventRepository(scheduledEvent).create()
+  const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    const data: SelectScheduledEvent = {
+      id: createId(),
+      isArchived: null,
+      userId: null,
+      createdAt: null,
+      updatedAt: null,
+      eventId: "",
+      color: "",
+      status: "test",
+      title: formData.title,
+      startTime: new Date(),
+      endTime: new Date(),
+    }
+    await createScheduledEvent(data)
   }
 
   return (
@@ -145,21 +163,23 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
         </div>
         <CardTitle>
           <Form {...form}>
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-row justify-start gap-1">
-                  <FormControl>
-                    <input
-                      className="w-full bg-none outline-none transition duration-300 ease-in-out focus:bg-gray-100"
-                      {...field}
-                    ></input>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem className="flex w-full flex-row justify-start gap-1">
+                    <FormControl>
+                      <input
+                        className="w-full bg-none outline-none transition duration-300 ease-in-out focus:bg-gray-100"
+                        {...field}
+                      ></input>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
           </Form>
         </CardTitle>
         <CardContent className="p-0">
@@ -169,8 +189,10 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
         </CardContent>
       </CardHeader>
       <CardFooter className="flex justify-between">
-        <Button variant="destructive">Delete</Button>
-        <Button variant="default" onClick={handleCreateEventInstance}>
+        <Button variant="destructive" onClick={handleDeleteEvent}>
+          Delete
+        </Button>
+        <Button variant="default" type="submit">
           Create
         </Button>
       </CardFooter>

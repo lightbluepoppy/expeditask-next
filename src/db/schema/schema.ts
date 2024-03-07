@@ -71,7 +71,7 @@ export const recursiveEvent = mysqlTable("recursive_event", {
 const baseColumns = {
   userId: varchar("user_id", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
   title: varchar("title", { length: 255 }).notNull(),
   isArchived: boolean("is_archived").default(false),
   color: varchar("color", { length: 6 }),
@@ -114,16 +114,16 @@ export const tag = mysqlTable("tag", {
 })
 
 export const tagEvent = mysqlTable("tag_event", {
-  eventId: varchar("eventId", { length: 255 }).unique(),
+  eventId: varchar("eventId", { length: 255 }).primaryKey().unique(),
   tagId: varchar("tagId", { length: 255 }),
 })
 
 export const userRelations = relations(user, ({ one, many }) => ({
   accounts: one(accounts),
   sessions: one(sessions),
+  events: many(event),
   scheduledEvent: many(scheduledEvent),
   recordedEvent: many(recordedEvent),
-  events: many(event),
   tag: many(tag),
 }))
 

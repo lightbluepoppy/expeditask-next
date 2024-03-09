@@ -140,11 +140,12 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
 
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     const data: SelectScheduledEvent = {
-      id: createId(),
       isArchived: null,
       userId: null,
       createdAt: null,
       updatedAt: null,
+      // id: createId(),
+      id: "1000",
       eventId: "",
       color: "",
       status: "test",
@@ -189,7 +190,7 @@ export const EditorCard: EditorCard = ({ setPreviousId }) => {
         </CardContent>
       </CardHeader>
       <CardFooter className="flex justify-between">
-        <Button variant="destructive" onClick={handleDeleteEvent}>
+        <Button variant="destructive" onClick={handleDeleteEvent()}>
           Delete
         </Button>
         <Button variant="default" type="submit">

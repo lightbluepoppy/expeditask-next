@@ -1,12 +1,7 @@
-import { drizzle } from "drizzle-orm/planetscale-serverless"
-import { Client } from "@planetscale/database"
-import * as schema from "src/db/schema/schema"
+import { drizzle } from "drizzle-orm/vercel-postgres"
+import { sql } from "@vercel/postgres"
 import * as dotenv from "dotenv"
 
 dotenv.config({ path: ".env.local" })
 
-export const connection = new Client({
-  url: process.env.DATABASE_URI,
-})
-
-export const db = drizzle(connection, { schema })
+export const db = drizzle(sql)

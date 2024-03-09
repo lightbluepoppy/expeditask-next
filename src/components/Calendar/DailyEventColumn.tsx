@@ -36,8 +36,6 @@ export const DailyEventColumn: React.FC<DailyEventColumnProps> = ({ date }) => {
       const scheduledEvents = await getAllScheduledEvents()
       const recordedEvents = await getAllRecordedEvents()
       setEvents([scheduledEvents!, recordedEvents!])
-      // console.log(scheduledEvents)
-      // console.log(recordedEvents)
     }
 
     fetchEvents()

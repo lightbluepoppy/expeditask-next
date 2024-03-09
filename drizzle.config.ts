@@ -5,8 +5,10 @@ dotenv.config({ path: ".env.local" })
 export default {
   schema: "src/db/schema/schema.ts",
   out: "src/db/migrations",
-  driver: "mysql2",
+  driver: "pg",
   dbCredentials: {
-    uri: process.env.DATABASE_URI!,
+    connectionString: process.env.POSTGRES_URL!,
   },
+  verbose: true,
+  strict: true,
 } satisfies Config
